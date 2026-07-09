@@ -1,0 +1,17 @@
+services:
+
+  postgres:
+    image: 'postgres:18.3'
+    container_name: 'postgres'
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_DB=orderdb'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "orderdb"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
