@@ -7,7 +7,7 @@ import {
   makeToken
 } from '../../test-utils'
 import Signup from './Signup'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 
 vi.mock('../misc/OrderApi')
 
@@ -46,7 +46,7 @@ describe('Signup', () => {
   })
 
   it('shows a generic error message on network failure (no error.response)', async () => {
-    orderApi.signup.mockRejectedValue({ message: 'Network Error' })
+    bookstoreApi.signup.mockRejectedValue({ message: 'Network Error' })
     render(<Signup />)
     await fillForm()
     await userEvent.click(screen.getByRole('button', { name: /sign up/i }))
@@ -57,7 +57,7 @@ describe('Signup', () => {
   })
 
   it('shows conflict message on 409 response', async () => {
-    orderApi.signup.mockRejectedValue({
+    bookstoreApi.signup.mockRejectedValue({
       response: { data: { status: 409, message: 'Username already in use' } }
     })
     render(<Signup />)
@@ -69,7 +69,7 @@ describe('Signup', () => {
   })
 
   it('shows validation message on 400 response', async () => {
-    orderApi.signup.mockRejectedValue({
+    bookstoreApi.signup.mockRejectedValue({
       response: {
         data: {
           status: 400,
@@ -93,7 +93,7 @@ describe('Signup', () => {
       name: 'Alice',
       exp: futureExp
     }
-    orderApi.signup.mockResolvedValue({
+    bookstoreApi.signup.mockResolvedValue({
       data: { accessToken: makeToken(payload) }
     })
 

@@ -27,14 +27,17 @@ function Navbar() {
           <Anchor component={Link} to='/' c='white'>
             Home
           </Anchor>
+            <Anchor component={Link} to='/bookspage' c='white'>
+                Books
+            </Anchor>
           {isAdmin && (
             <Anchor component={Link} to='/adminpage' c='white'>
               AdminPage
             </Anchor>
           )}
           {isUser && (
-            <Anchor component={Link} to='/userpage' c='white'>
-              UserPage
+            <Anchor component={Link} to='/orderspage' c='white'>
+              Orders
             </Anchor>
           )}
         </Group>
@@ -54,6 +57,11 @@ function Navbar() {
               Hi {userName}
             </Text>
           )}
+            {isAuthenticated && (
+                <Anchor component={Link} to='/cartpage' c='white'>
+                    Cart
+                </Anchor>
+            )}
           {isAuthenticated && (
             <Button
               variant='white'

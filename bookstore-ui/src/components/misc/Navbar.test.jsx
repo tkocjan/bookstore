@@ -33,10 +33,10 @@ describe('Navbar — unauthenticated', () => {
     expect(screen.queryByText('Logout')).not.toBeInTheDocument()
   })
 
-  it('does not show AdminPage or UserPage links', () => {
+  it('does not show AdminPage or OrdersPage links', () => {
     renderNavbar()
     expect(screen.queryByText('AdminPage')).not.toBeInTheDocument()
-    expect(screen.queryByText('UserPage')).not.toBeInTheDocument()
+    expect(screen.queryByText('OrdersPage')).not.toBeInTheDocument()
   })
 })
 
@@ -48,9 +48,9 @@ describe('Navbar — admin user', () => {
     expect(screen.getByText('AdminPage')).toBeInTheDocument()
   })
 
-  it('does not show UserPage link', () => {
+  it('does not show OrdersPage link', () => {
     renderNavbar()
-    expect(screen.queryByText('UserPage')).not.toBeInTheDocument()
+    expect(screen.queryByText('OrdersPage')).not.toBeInTheDocument()
   })
 
   it('shows greeting with user name and Logout button', () => {
@@ -69,9 +69,9 @@ describe('Navbar — admin user', () => {
 describe('Navbar — regular user', () => {
   beforeEach(() => seedLocalStorage(makeRegularUser()))
 
-  it('shows UserPage link', () => {
+  it('shows OrdersPage link', () => {
     renderNavbar()
-    expect(screen.getByText('UserPage')).toBeInTheDocument()
+    expect(screen.getByText('OrdersPage')).toBeInTheDocument()
   })
 
   it('does not show AdminPage link', () => {

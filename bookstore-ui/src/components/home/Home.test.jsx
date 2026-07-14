@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react'
 import { render } from '../../test-utils'
 import Home from './Home'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 
 vi.mock('../misc/OrderApi')
 
@@ -12,8 +12,8 @@ beforeEach(() => {
 
 describe('Home', () => {
   it('renders user and order counts after data loads', async () => {
-    orderApi.numberOfUsers.mockResolvedValue({ data: 5 })
-    orderApi.numberOfOrders.mockResolvedValue({ data: 12 })
+    bookstoreApi.numberOfUsers.mockResolvedValue({ data: 5 })
+    bookstoreApi.numberOfOrders.mockResolvedValue({ data: 12 })
 
     render(<Home />)
 
@@ -27,8 +27,8 @@ describe('Home', () => {
   })
 
   it('shows 0 counts when API calls fail', async () => {
-    orderApi.numberOfUsers.mockRejectedValue(new Error('Network error'))
-    orderApi.numberOfOrders.mockRejectedValue(new Error('Network error'))
+    bookstoreApi.numberOfUsers.mockRejectedValue(new Error('Network error'))
+    bookstoreApi.numberOfOrders.mockRejectedValue(new Error('Network error'))
 
     render(<Home />)
 
@@ -41,12 +41,12 @@ describe('Home', () => {
 
   it('shows the loading overlay while fetching and hides it after', async () => {
     let resolveUsers, resolveOrders
-    orderApi.numberOfUsers.mockReturnValue(
+    bookstoreApi.numberOfUsers.mockReturnValue(
       new Promise((r) => {
         resolveUsers = r
       })
     )
-    orderApi.numberOfOrders.mockReturnValue(
+    bookstoreApi.numberOfOrders.mockReturnValue(
       new Promise((r) => {
         resolveOrders = r
       })

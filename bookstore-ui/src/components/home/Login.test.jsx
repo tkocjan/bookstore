@@ -7,7 +7,7 @@ import {
   makeToken
 } from '../../test-utils'
 import Login from './Login'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 
 vi.mock('../misc/OrderApi')
 
@@ -31,7 +31,7 @@ describe('Login', () => {
   })
 
   it('shows error alert when API returns an error', async () => {
-    orderApi.authenticate.mockRejectedValue({ message: 'Unauthorized' })
+    bookstoreApi.authenticate.mockRejectedValue({ message: 'Unauthorized' })
     render(<Login />)
 
     await userEvent.type(screen.getByLabelText('Username'), 'alice')
@@ -51,7 +51,7 @@ describe('Login', () => {
       name: 'Alice',
       exp: futureExp
     }
-    orderApi.authenticate.mockResolvedValue({
+    bookstoreApi.authenticate.mockResolvedValue({
       data: { accessToken: makeToken(payload) }
     })
 

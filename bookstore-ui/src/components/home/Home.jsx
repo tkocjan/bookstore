@@ -8,7 +8,7 @@ import {
   LoadingOverlay
 } from '@mantine/core'
 import { IconUsers, IconDeviceLaptop } from '@tabler/icons-react'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 import { handleLogError } from '../misc/Helpers'
 
 function Home() {
@@ -19,8 +19,8 @@ function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const responseUsers = await orderApi.numberOfUsers()
-        const responseOrders = await orderApi.numberOfOrders()
+        const responseUsers = await bookstoreApi.numberOfUsers()
+        const responseOrders = await bookstoreApi.numberOfOrders()
         setNumberOfUsers(responseUsers.data)
         setNumberOfOrders(responseOrders.data)
       } catch (error) {

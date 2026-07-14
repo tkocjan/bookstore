@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
 import { useAuth } from '../context/AuthContext'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 import { parseJwt, handleLogError } from '../misc/Helpers'
 
 function Login() {
@@ -33,7 +33,7 @@ function Login() {
     }
 
     try {
-      const response = await orderApi.authenticate(username, password)
+      const response = await bookstoreApi.authenticate(username, password)
       const { accessToken } = response.data
       const data = parseJwt(accessToken)
       const authenticatedUser = { data, accessToken }

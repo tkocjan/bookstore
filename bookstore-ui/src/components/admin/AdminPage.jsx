@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { Container } from '@mantine/core'
 import { useAuth } from '../context/AuthContext'
 import AdminTab from './AdminTab'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 import { handleLogError } from '../misc/Helpers'
 
 function AdminPage() {
@@ -39,7 +39,7 @@ function AdminPage() {
   const handleGetUsers = async () => {
     setIsUsersLoading(true)
     try {
-      const response = await orderApi.getUsers(user)
+      const response = await bookstoreApi.getUsers(user)
       setUsers(response.data)
     } catch (error) {
       handleLogError(error)
@@ -51,7 +51,7 @@ function AdminPage() {
   const handleDeleteUser = async (username) => {
     setIsUsersLoading(true)
     try {
-      await orderApi.deleteUser(user, username)
+      await bookstoreApi.deleteUser(user, username)
       handleGetUsers()
     } catch (error) {
       handleLogError(error)
@@ -64,7 +64,7 @@ function AdminPage() {
     const username = userUsernameSearch
     setIsUsersLoading(true)
     try {
-      const response = await orderApi.getUsers(user, username)
+      const response = await bookstoreApi.getUsers(user, username)
       const data = response.data
       const users = data instanceof Array ? data : [data]
       setUsers(users)
@@ -79,7 +79,7 @@ function AdminPage() {
   const handleGetOrders = async () => {
     setIsOrdersLoading(true)
     try {
-      const response = await orderApi.getOrders(user)
+      const response = await bookstoreApi.getOrders(user)
       setOrders(response.data)
     } catch (error) {
       handleLogError(error)
@@ -91,7 +91,7 @@ function AdminPage() {
   const handleDeleteOrder = async (orderId) => {
     setIsOrdersLoading(true)
     try {
-      await orderApi.deleteOrder(user, orderId)
+      await bookstoreApi.deleteOrder(user, orderId)
       handleGetOrders()
     } catch (error) {
       handleLogError(error)
@@ -108,7 +108,7 @@ function AdminPage() {
 
     const order = { description }
     try {
-      await orderApi.createOrder(user, order)
+      await bookstoreApi.createOrder(user, order)
       handleGetOrders()
       setOrderDescription('')
     } catch (error) {
@@ -121,7 +121,7 @@ function AdminPage() {
     const text = orderTextSearch
     setIsOrdersLoading(true)
     try {
-      const response = await orderApi.getOrders(user, text)
+      const response = await bookstoreApi.getOrders(user, text)
       setOrders(response.data)
     } catch (error) {
       handleLogError(error)

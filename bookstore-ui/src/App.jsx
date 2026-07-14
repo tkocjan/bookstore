@@ -11,8 +11,10 @@ import Navbar from './components/misc/Navbar'
 import Home from './components/home/Home'
 import Login from './components/home/Login'
 import Signup from './components/home/Signup'
+import BooksPage from './components/books/BooksPage'
 import AdminPage from './components/admin/AdminPage'
-import UserPage from './components/user/UserPage'
+import OrdersPage from './components/orders/OrdersPage.jsx'
+import CartPage from './components/cart/CartPage.jsx'
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
+              <Route path='/bookspage' element={<BooksPage />} />
               <Route
                 path='/adminpage'
                 element={
@@ -34,13 +37,21 @@ function App() {
                 }
               />
               <Route
-                path='/userpage'
+                path='/orderspage'
                 element={
                   <PrivateRoute>
-                    <UserPage />
+                    <OrdersPage />
                   </PrivateRoute>
                 }
               />
+                <Route
+                    path='/cartpage'
+                    element={
+                        <PrivateRoute>
+                            <CartPage />
+                        </PrivateRoute>
+                    }
+                />
               <Route path='*' element={<Navigate to='/' />} />
             </Routes>
           </AppShell.Main>

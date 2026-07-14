@@ -6,7 +6,7 @@ import {
   seedLocalStorage
 } from '../../test-utils'
 import AdminPage from './AdminPage'
-import { orderApi } from '../misc/OrderApi'
+import { bookstoreApi } from '../misc/BookstoreApi.js'
 
 vi.mock('../misc/OrderApi')
 
@@ -27,8 +27,8 @@ describe('AdminPage', () => {
     const user = { data: userData, accessToken: makeToken(userData) }
     seedLocalStorage(user)
 
-    orderApi.getUsers.mockResolvedValue({ data: [] })
-    orderApi.getOrders.mockResolvedValue({ data: [] })
+    bookstoreApi.getUsers.mockResolvedValue({ data: [] })
+    bookstoreApi.getOrders.mockResolvedValue({ data: [] })
 
     render(<AdminPage />, { initialRoute: '/adminpage' })
     // AdminPage renders <Navigate to='/' /> immediately — Users tab should not appear
@@ -39,8 +39,8 @@ describe('AdminPage', () => {
 
   it('loads and displays the admin tabs when user is ADMIN', async () => {
     seedLocalStorage(makeAdminUser())
-    orderApi.getUsers.mockResolvedValue({ data: [] })
-    orderApi.getOrders.mockResolvedValue({ data: [] })
+    bookstoreApi.getUsers.mockResolvedValue({ data: [] })
+    bookstoreApi.getOrders.mockResolvedValue({ data: [] })
 
     render(<AdminPage />)
 
@@ -52,7 +52,7 @@ describe('AdminPage', () => {
 
   it('fetches users and orders on mount', async () => {
     seedLocalStorage(makeAdminUser())
-    orderApi.getUsers.mockResolvedValue({
+    bookstoreApi.getUsers.mockResolvedValue({
       data: [
         {
           id: 1,
@@ -63,13 +63,13 @@ describe('AdminPage', () => {
         }
       ]
     })
-    orderApi.getOrders.mockResolvedValue({ data: [] })
+    bookstoreApi.getOrders.mockResolvedValue({ data: [] })
 
     render(<AdminPage />)
 
     await waitFor(() => {
-      expect(orderApi.getUsers).toHaveBeenCalledTimes(1)
-      expect(orderApi.getOrders).toHaveBeenCalledTimes(1)
+      expect(bookstoreApi.getUsers).toHaveBeenCalledTimes(1)
+      expect(bookstoreApi.getOrders).toHaveBeenCalledTimes(1)
       expect(screen.getByText('alice')).toBeInTheDocument()
     })
   })
@@ -77,12 +77,12 @@ describe('AdminPage', () => {
   it('shows loading overlays while fetching and hides them after', async () => {
     seedLocalStorage(makeAdminUser())
     let resolveUsers, resolveOrders
-    orderApi.getUsers.mockReturnValue(
+    bookstoreApi.getUsers.mockReturnValue(
       new Promise((r) => {
         resolveUsers = r
       })
     )
-    orderApi.getOrders.mockReturnValue(
+    bookstoreApi.getOrders.mockReturnValue(
       new Promise((r) => {
         resolveOrders = r
       })

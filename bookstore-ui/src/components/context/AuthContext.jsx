@@ -1,5 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
+export function getUser() {
+    return JSON.parse(localStorage.getItem('user'));
+}
+
 const AuthContext = createContext()
 
 function AuthProvider({ children }) {
