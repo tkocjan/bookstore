@@ -5,7 +5,7 @@ interface IAuthContext {
     jwtUserData: IJwtUserData|null;
     getJwtUserData: () => IJwtUserData|null;
     userIsAuthenticated: () => boolean;
-    userLoggerIn: (user: any) => void;
+    userLoggedIn: (user: any) => void;
     userLoggedOut: () => void;
 }
 
@@ -32,11 +32,18 @@ export function getJwtUserData(): IJwtUserData|null {
         : null;
 }
 
+export function getUserRole(): string|null {
+    const jwtUserData = getJwtUserData();
+    return jwtUserData
+        ? jwtUserData.data.rol[0]
+        : null;
+}
+
 const AuthContext = createContext<IAuthContext>({
     jwtUserData: null,
     getJwtUserData: () => null,
     userIsAuthenticated: () => false,
-    userLoggerIn: () => {},
+    userLoggedIn: () => {},
     userLoggedOut: () => {}
 });
 
@@ -93,8 +100,8 @@ function AuthProvider({children}: AppProviderProps) {
     const contextValue: IAuthContext = {
         jwtUserData: jwtUserData,
         getJwtUserData: getJwtUserData,
-        userIsAuthenticated,
-        userLoggerIn: userLoggedIn,
+        userIsAuthenticated: userIsAuthenticated,
+        userLoggedIn: userLoggedIn,
         userLoggedOut: userLoggedOut
     };
 
@@ -105,7 +112,7 @@ function AuthProvider({children}: AppProviderProps) {
 
 // export default AuthContext
 
-export function useAuth(): IAuthContext {
+export function useAuthContext(): IAuthContext {
     return useContext(AuthContext)
 }
 

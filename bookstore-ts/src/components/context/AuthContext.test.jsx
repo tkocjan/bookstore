@@ -5,19 +5,19 @@ import {
   makeExpiredUser,
   seedLocalStorage
 } from '../../test-utils'
-import { AuthProvider, useAuth } from './AuthContext.tsx'
+import { AuthProvider, useAuthContext } from './AuthContext.tsx'
 import { MantineProvider } from '@mantine/core'
 import { MemoryRouter } from 'react-router-dom'
 
 // A simple probe component that exposes context values via data-testid elements
 function AuthProbe() {
-  const { jwtUserData, getJwtUserData, userIsAuthenticated, userLoggerIn, userLoggedOut } =
-    useAuth()
+  const { jwtUserData, getJwtUserData, userIsAuthenticated, userLoggedIn, userLoggedOut } =
+    useAuthContext()
   return (
     <div>
       <span data-testid='is-auth'>{String(userIsAuthenticated())}</span>
       <span data-testid='user-name'>{jwtUserData ? jwtUserData.data.name : 'none'}</span>
-      <button onClick={() => userLoggerIn(makeRegularUser())}>login</button>
+      <button onClick={() => userLoggedIn(makeRegularUser())}>login</button>
       <button onClick={() => userLoggedOut()}>logout</button>
       <span data-testid='get-user'>
         {getJwtUserData() ? getJwtUserData().data.name : 'none'}

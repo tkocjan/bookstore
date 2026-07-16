@@ -1,15 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Group, Button, Anchor, AppShell, Text } from '@mantine/core'
-import { useAuth } from '../context/AuthContext.tsx'
+import { getJwtUserData, getUserRole, useAuthContext } from '../context/AuthContext.tsx'
 
 function Navbar() {
-  const { getJwtUserData, userIsAuthenticated, userLoggedOut } = useAuth()
+  const { userIsAuthenticated, userLoggedOut } = useAuthContext()
   const navigate = useNavigate()
 
   const isAuthenticated = userIsAuthenticated()
   const user = getJwtUserData()
-  const isAdmin = user && user.data.rol[0] === 'ADMIN'
-  const isUser = user && user.data.rol[0] === 'USER'
+  const isAdmin = getUserRole() === 'ADMIN'
+  const isUser = getUserRole() === 'USER'
   const userName = user ? user.data.name : ''
 
   const handleLogout = () => {
@@ -54,10 +54,10 @@ function Navbar() {
                   )}
                   {isAuthenticated && (
                       <Text size='sm' c='white'>
-                          Hi {userName}
+                          Hi, {userName}!
                       </Text>
                   )}
-                  {isAuthenticated && (
+                  {isUser && (
                       <Anchor component={Link} to='/cartpage' c='white'>
                           Cart
                       </Anchor>

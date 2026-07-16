@@ -9,7 +9,7 @@ import {
     Box,
     LoadingOverlay,
     Skeleton,
-    Paper
+    Paper, ScrollArea
 } from '@mantine/core'
 import {IconBook, IconSearch} from '@tabler/icons-react'
 import BookCover from '../misc/BookCover'
@@ -110,7 +110,12 @@ function BookList(props: BookListProps)
                         </form>
                     </Grid.Col>
                 </Grid>
+                {/*<div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>*/}
+                {/*<ScrollArea style={{ flex: 1 }}>*/}
+                <ScrollArea h={600}>
                 <Stack gap='sm'>{bookList}</Stack>
+                </ScrollArea>
+                {/*</div>*/}
             </Box>
         </Paper>
     )

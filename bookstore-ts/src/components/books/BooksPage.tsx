@@ -3,22 +3,17 @@ import {
     type ChangeEvent as ReactChangeEvent,
     type SubmitEvent as ReactSubmitEvent
 } from 'react'
-import {Navigate} from 'react-router-dom'
 import {Container} from '@mantine/core'
 import BookList from './BookList.tsx'
-import {useAuth} from '../context/AuthContext'
 import {bookstoreApi} from '../misc/BookstoreApi'
 import {handleLogError} from '../misc/Helpers'
 import type {AxiosError} from "axios";
 
-function BooksPage() {
-    const authContext = useAuth()
-    const jwtUserData = authContext.getJwtUserData()
-    const isUser = jwtUserData?.data.rol[0] === 'USER'
-
-    const [books, setBooks] = useState([])
-    const [bookTextSearch, setBookTextSearch] = useState('')
-    const [isBooksLoading, setIsBooksLoading] = useState(false)
+function BooksPage()
+{
+    const [books, setBooks] = useState([]);
+    const [bookTextSearch, setBookTextSearch] = useState('');
+    const [isBooksLoading, setIsBooksLoading] = useState(false);
 
     useEffect(() => {
         handleGetBooks()
@@ -53,10 +48,6 @@ function BooksPage() {
             handleLogError(error as AxiosError)
             setBooks([])
         }
-    }
-
-    if (!isUser) {
-        return <Navigate to='/'/>
     }
 
     return (

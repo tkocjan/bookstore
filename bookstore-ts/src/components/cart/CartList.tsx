@@ -1,15 +1,15 @@
 import {
-  Grid,
-  Title,
-  TextInput,
-  ActionIcon,
-  Card,
-  Text,
-  Stack,
-  Box,
-  LoadingOverlay,
-  Skeleton,
-  Paper
+    Grid,
+    Title,
+    TextInput,
+    ActionIcon,
+    Card,
+    Text,
+    Stack,
+    Box,
+    LoadingOverlay,
+    Skeleton,
+    Paper, ScrollArea
 } from '@mantine/core'
 import {IconSearch, IconShoppingCart} from '@tabler/icons-react'
 import BookCover from '../misc/BookCover.tsx'
@@ -102,7 +102,9 @@ function CartList(props: CartListProps)
             </form>
           </Grid.Col>
         </Grid>
-        <Stack gap='sm'>{bookList}</Stack>
+          <ScrollArea h={600}>
+              <Stack gap='sm'>{bookList}</Stack>
+          </ScrollArea>
       </Box>
     </Paper>
   )

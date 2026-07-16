@@ -6,16 +6,13 @@ import {
 import { Navigate } from 'react-router-dom'
 import { Container } from '@mantine/core'
 import OrdersTable from './OrdersTable.tsx'
-import {useAuth} from '../context/AuthContext.tsx'
+import {getUserRole} from '../context/AuthContext.tsx'
 import { bookstoreApi } from '../misc/BookstoreApi.ts'
 import { handleLogError } from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
 import type {IUserDto} from "../misc/BookstoreApi.tsx";
 
 function OrdersPage() {
-  const authContext = useAuth()
-  const user = authContext.getJwtUserData()
-  const isUser = user?.data.rol[0] === 'USER'
 
   const [userDtoMe, setUserDtoMe] = useState<IUserDto | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -62,7 +59,7 @@ function OrdersPage() {
     }
   }
 
-  if (!isUser) {
+  if (getUserRole() !== 'USER') {
     return <Navigate to='/' />
   }
 

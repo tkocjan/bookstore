@@ -12,13 +12,13 @@ import {
   Box
 } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
-import { useAuth } from '../context/AuthContext.tsx'
+import { useAuthContext } from '../context/AuthContext.tsx'
 import { bookstoreApi } from '../misc/BookstoreApi.ts'
 import { parseJwt, handleLogError } from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
 
 function Signup() {
-  const authContext = useAuth()
+  const authContext = useAuthContext()
   const isLoggedIn = authContext.userIsAuthenticated()
 
   const [username, setUsername] = useState('')
@@ -45,7 +45,7 @@ function Signup() {
       const data = parseJwt(accessToken)
       const authenticatedUser = { data, accessToken }
 
-      authContext.userLoggerIn(authenticatedUser)
+      authContext.userLoggedIn(authenticatedUser)
 
       setUsername('')
       setPassword('')

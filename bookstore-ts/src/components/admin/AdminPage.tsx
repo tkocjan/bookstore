@@ -4,27 +4,22 @@ import {useEffect, useState,
 } from 'react'
 import {Navigate} from 'react-router-dom'
 import {Container} from '@mantine/core'
-import {useAuth, type IJwtUserData} from '../context/AuthContext.tsx'
+import {getUserRole} from '../context/AuthContext.tsx'
 import AdminTab from './AdminTab'
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {handleLogError} from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
 
 function AdminPage() {
-    const Auth = useAuth()
-    const user: IJwtUserData | null = Auth.getJwtUserData()
-
     const [users, setUsers] = useState([])
     const [orders, setOrders] = useState([])
     const [orderDescription, setOrderDescription] = useState('')
     const [orderTextSearch, setOrderTextSearch] = useState('')
     const [userUsernameSearch, setUserUsernameSearch] = useState('')
-    const [isAdmin, setIsAdmin] = useState(true)
     const [isUsersLoading, setIsUsersLoading] = useState(true)
     const [isOrdersLoading, setIsOrdersLoading] = useState(true)
 
     useEffect(() => {
-        setIsAdmin(user?.data.rol[0] === 'ADMIN')
         handleGetUsers()
         handleGetOrders()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -135,7 +130,7 @@ function AdminPage() {
         }
     }
 
-    if (!isAdmin) {
+    if (getUserRole() !== 'ADMIN') {
         return <Navigate to='/'/>
     }
 

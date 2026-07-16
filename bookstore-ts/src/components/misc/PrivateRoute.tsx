@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext.tsx'
+import { useAuthContext } from '../context/AuthContext.tsx'
 import type {ReactNode} from "react";
 
 interface PrivateRouteProps {
@@ -7,7 +7,7 @@ interface PrivateRouteProps {
 }
 
 function PrivateRoute(props: PrivateRouteProps) {
-  const { userIsAuthenticated } = useAuth()
+  const { userIsAuthenticated } = useAuthContext()
 
   return userIsAuthenticated() ? props.children : <Navigate to='/login' />
 }

@@ -2,16 +2,13 @@ import {type ChangeEvent as ReactChangeEvent, useEffect, useState} from 'react'
 import {Navigate} from 'react-router-dom'
 import {Container} from '@mantine/core'
 import CartList from './CartList'
-import {useAuth} from '../context/AuthContext'
+import {getUserRole} from '../context/AuthContext'
 import {bookstoreApi} from '../misc/BookstoreApi.js'
 import {handleLogError} from '../misc/Helpers'
 import type {AxiosError} from "axios";
 
-function CartPage() {
-    const authContext = useAuth()
-    const jwtUserData = authContext.getJwtUserData()
-    const isUser = jwtUserData?.data.rol[0] === 'USER'
-
+function CartPage()
+{
     const [books, setBooks] = useState([])
     const [bookTextSearch, setBookTextSearch] = useState('')
     const [isBooksLoading, setIsBooksLoading] = useState(false)
@@ -50,7 +47,7 @@ function CartPage() {
         }
     }
 
-    if (!isUser) {
+    if (getUserRole() !== 'USER') {
         return <Navigate to='/'/>
     }
 

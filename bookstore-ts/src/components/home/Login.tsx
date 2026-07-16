@@ -12,18 +12,20 @@ import {
     Box
 } from '@mantine/core'
 import {IconInfoCircle} from '@tabler/icons-react'
-import {useAuth} from '../context/AuthContext.tsx'
+import {useAuthContext} from '../context/AuthContext.tsx'
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {parseJwt, handleLogError} from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
 
 function Login() {
-    const authContext = useAuth()
+    const authContext = useAuthContext()
     const isLoggedIn = authContext.userIsAuthenticated()
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isError, setIsError] = useState(false)
+
+    // const [isLoggedIn] = useState<boolean>(authContext.userIsAuthenticated());
 
     const handleSubmit = async (e: ReactSubmitEvent) => {
         e.preventDefault()
@@ -37,9 +39,9 @@ function Login() {
             const response = await bookstoreApi.authenticate(username, password)
             const {accessToken} = response.data
             const data = parseJwt(accessToken)
-            const authenticatedUser = {data, accessToken}
+            const jwtUserData = {data, accessToken}
 
-            authContext.userLoggerIn(authenticatedUser)
+            authContext.userLoggedIn(jwtUserData);
 
             setUsername('')
             setPassword('')
