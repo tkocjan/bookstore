@@ -1,6 +1,6 @@
 spring:
   application:
-    name: order-api
+    name: bookstore-api
 
   jpa:
     hibernate:
@@ -11,6 +11,17 @@ spring:
     url: jdbc:postgresql://rocky:5432/bookstore
     username: postgres
     password: Password123=
+
+  data:
+    web:
+      pageable:
+        serialization-mode: via-dto
+        page-parameter: currentPage
+        size-parameter: pageSize
+
+  http:
+    converters:
+      preferred-json-mapper: jackson2
 
 app:
   jwt:

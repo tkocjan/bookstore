@@ -1,6 +1,6 @@
 import { screen, fireEvent } from '@testing-library/react'
 import { render } from '../../test-utils'
-import AdminTab from './AdminTab.tsx'
+import AdminTabs from './AdminTabs.tsx.bak'
 
 function makeProps(overrides = {}) {
   return {
@@ -23,13 +23,13 @@ function makeProps(overrides = {}) {
 
 describe('AdminTab', () => {
   it('renders Users tab by default', () => {
-    render(<AdminTab {...makeProps()} />)
+    render(<AdminTabs {...makeProps()} />)
     expect(screen.getByText('Users')).toBeInTheDocument()
     expect(screen.getByText('No user')).toBeInTheDocument()
   })
 
   it('switches to Orders panel when Orders tab is clicked', () => {
-    render(<AdminTab {...makeProps()} />)
+    render(<AdminTabs {...makeProps()} />)
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
     expect(screen.getByText('No order')).toBeInTheDocument()
   })
@@ -44,7 +44,7 @@ describe('AdminTab', () => {
         role: 'USER'
       }
     ]
-    render(<AdminTab {...makeProps({ users })} />)
+    render(<AdminTabs {...makeProps({ users })} />)
     expect(screen.getByText('alice')).toBeInTheDocument()
   })
 
@@ -57,14 +57,14 @@ describe('AdminTab', () => {
         description: 'Test order'
       }
     ]
-    render(<AdminTab {...makeProps({ orders })} />)
+    render(<AdminTabs {...makeProps({ orders })} />)
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
     expect(screen.getByText('Test order')).toBeInTheDocument()
   })
 
   it('shows the users loading overlay when isUsersLoading is true', () => {
     const { container } = render(
-      <AdminTab {...makeProps({ isUsersLoading: true })} />
+      <AdminTabs {...makeProps({ isUsersLoading: true })} />
     )
     expect(
       container.querySelector('.mantine-LoadingOverlay-root')
@@ -73,7 +73,7 @@ describe('AdminTab', () => {
 
   it('shows the orders loading overlay when isOrdersLoading is true', () => {
     const { container } = render(
-      <AdminTab {...makeProps({ isOrdersLoading: true })} />
+      <AdminTabs {...makeProps({ isOrdersLoading: true })} />
     )
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
     expect(

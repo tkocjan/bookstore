@@ -1,0 +1,27 @@
+import {Tabs} from '@mantine/core'
+import {IconUsers, IconDeviceLaptop} from '@tabler/icons-react'
+import AdminOrderTab from './AdminOrderTab.tsx'
+import UsersTab from "./UsersTab.tsx";
+
+function AdminTabs() {
+
+    return (
+        <Tabs defaultValue='users' mt='md'>
+            <Tabs.List>
+                <Tabs.Tab value='users' leftSection={<IconUsers size={16}/>}>
+                    Users
+                </Tabs.Tab>
+                <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16}/>}>
+                    Orders
+                </Tabs.Tab>
+            </Tabs.List>
+
+            <UsersTab/>
+
+            <AdminOrderTab/>
+
+        </Tabs>
+    )
+}
+
+export default AdminTabs

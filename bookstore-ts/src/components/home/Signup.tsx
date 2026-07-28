@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
 import { useAuthContext } from '../context/AuthContext.tsx'
-import { bookstoreApi } from '../misc/BookstoreApi.ts'
+import { bookstoreApi, type SignupInputData } from '../misc/BookstoreApi.ts'
 import { parseJwt, handleLogError } from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
 
@@ -37,7 +37,7 @@ function Signup() {
       return
     }
 
-    const user = { username, password, name, email }
+    const user: SignupInputData = { username, password, name, email }
 
     try {
       const response = await bookstoreApi.signup(user)

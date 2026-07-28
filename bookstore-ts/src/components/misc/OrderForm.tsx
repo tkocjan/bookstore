@@ -2,7 +2,7 @@ import { Group, TextInput, Button } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 import type {ChangeEvent as ReactChangeEvent, SubmitEvent as ReactSubmitEvent} from "react";
 
-interface OrderFormProps {
+type OrderFormProps = {
     orderDescription: string;
     handleInputChange: (e: ReactChangeEvent<HTMLInputElement>) => void;
     handleCreateOrder: (e: ReactSubmitEvent) => void;

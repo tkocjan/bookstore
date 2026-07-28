@@ -5,10 +5,10 @@ import {
 import { Grid, Group, Title, Box, LoadingOverlay, Table } from '@mantine/core'
 import { IconDeviceLaptop } from '@tabler/icons-react'
 import OrderForm from '../misc/OrderForm.tsx'
-import type {IOrderDto} from "../misc/BookstoreApi.tsx";;
+import type {OrderDto} from "../misc/BookstoreApi.tsx";;
 
-interface UserOrderTableProps {
-    orders: IOrderDto[]|null;
+type UserOrderTableProps = {
+    orders: OrderDto[]|null;
     isLoading: boolean;
     orderDescription: string;
     handleInputChange: (e: ReactChangeEvent<HTMLInputElement>) => void;

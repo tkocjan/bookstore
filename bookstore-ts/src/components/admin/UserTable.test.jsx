@@ -1,6 +1,6 @@
 import { screen, fireEvent, within } from '@testing-library/react'
 import { render } from '../../test-utils'
-import UserTable from './UserTable.tsx'
+import UserList from './UserList.tsx'
 
 const mockUsers = [
   {
@@ -36,14 +36,14 @@ function getDeleteButtonInRow(rowText) {
   return within(row).getByRole('button')
 }
 
-describe('UserTable', () => {
+describe('UserList', () => {
   it('shows "No user" row when users array is empty', () => {
-    render(<UserTable {...makeProps()} />)
+    render(<UserList {...makeProps()} />)
     expect(screen.getByText('No user')).toBeInTheDocument()
   })
 
   it('renders a row for each user', () => {
-    render(<UserTable {...makeProps({ users: mockUsers })} />)
+    render(<UserList {...makeProps({ users: mockUsers })} />)
     expect(screen.getByText('bob')).toBeInTheDocument()
     expect(screen.getByText('Bob')).toBeInTheDocument()
     expect(screen.getByText('bob@example.com')).toBeInTheDocument()
@@ -51,25 +51,25 @@ describe('UserTable', () => {
   })
 
   it('delete button is disabled for the admin user', () => {
-    render(<UserTable {...makeProps({ users: mockUsers })} />)
+    render(<UserList {...makeProps({ users: mockUsers })} />)
     expect(getDeleteButtonInRow('admin')).toBeDisabled()
   })
 
   it('delete button is enabled for non-admin users', () => {
-    render(<UserTable {...makeProps({ users: mockUsers })} />)
+    render(<UserList {...makeProps({ users: mockUsers })} />)
     expect(getDeleteButtonInRow('bob')).not.toBeDisabled()
   })
 
   it('calls handleDeleteUser with the correct username when delete is clicked', () => {
     const handleDeleteUser = vi.fn()
-    render(<UserTable {...makeProps({ users: mockUsers, handleDeleteUser })} />)
+    render(<UserList {...makeProps({ users: mockUsers, handleDeleteUser })} />)
     fireEvent.click(getDeleteButtonInRow('bob'))
     expect(handleDeleteUser).toHaveBeenCalledWith('bob')
   })
 
   it('calls handleSearchUser when search form is submitted', () => {
     const handleSearchUser = vi.fn((e) => e.preventDefault())
-    render(<UserTable {...makeProps({ handleSearchUser })} />)
+    render(<UserList {...makeProps({ handleSearchUser })} />)
     fireEvent.submit(
       screen.getByPlaceholderText('Search by Username').closest('form')
     )

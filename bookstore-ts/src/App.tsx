@@ -4,7 +4,7 @@ import {
   Route,
   Navigate
 } from 'react-router-dom'
-import { AppShell, ScrollArea } from '@mantine/core'
+import { AppShell } from '@mantine/core'
 import { AuthProvider } from './components/context/AuthContext'
 import PrivateRoute from './components/misc/PrivateRoute'
 import Navbar from './components/misc/Navbar'

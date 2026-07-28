@@ -10,11 +10,11 @@ import {getUserRole} from '../context/AuthContext.tsx'
 import { bookstoreApi } from '../misc/BookstoreApi.ts'
 import { handleLogError } from '../misc/Helpers.ts'
 import type {AxiosError} from "axios";
-import type {IUserDto} from "../misc/BookstoreApi.tsx";
+import type {UserDto} from "../misc/BookstoreApi.tsx";
 
 function OrdersPage() {
 
-  const [userDtoMe, setUserDtoMe] = useState<IUserDto | null>(null)
+  const [userDtoMe, setUserDtoMe] = useState<UserDto | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [orderDescription, setOrderDescription] = useState('')
 

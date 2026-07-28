@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Image, Skeleton} from '@mantine/core'
 
-interface BookCoverProps {
+type BookCoverProps = {
     isbn: string;
     w: number;
     h: number;

@@ -1,6 +1,7 @@
 package com.abidimi.bookstore.domain.book;
 
 import com.abidimi.bookstore.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,11 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "books_users",
             joinColumns = @JoinColumn(name = "isbn"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonIgnore
     List<User> users;
 }

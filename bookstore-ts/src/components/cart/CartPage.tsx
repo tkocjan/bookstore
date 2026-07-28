@@ -1,51 +1,60 @@
-import {type ChangeEvent as ReactChangeEvent, useEffect, useState} from 'react'
+import {
+    useEffect, useState, useCallback,
+} from 'react'
 import {Navigate} from 'react-router-dom'
-import {Container} from '@mantine/core'
+import {
+    ActionIcon,
+    Box,
+    Container,
+    Flex,
+    Grid,
+    LoadingOverlay,
+    Pagination,
+    Paper,
+    TextInput,
+    Title
+} from '@mantine/core'
 import CartList from './CartList'
 import {getUserRole} from '../context/AuthContext'
-import {bookstoreApi} from '../misc/BookstoreApi.js'
+import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi.js'
 import {handleLogError} from '../misc/Helpers'
 import type {AxiosError} from "axios";
+import {IconSearch, IconShoppingCart} from "@tabler/icons-react";
 
 function CartPage()
 {
     const [books, setBooks] = useState([])
     const [bookTextSearch, setBookTextSearch] = useState('')
     const [isBooksLoading, setIsBooksLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [searchText, setSearchText] = useState<string>('');
 
     useEffect(() => {
         handleGetBooks()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [currentPage, bookTextSearch])
 
-    const handleInputChange = (e: ReactChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target
-        if (name === 'bookTextSearch') {
-            setBookTextSearch(value)
-        }
-    }
+    const handleGetBooks = useCallback(async () => {
+        setIsBooksLoading(true);
 
-    const handleGetBooks = async () => {
-        try {
-            setIsBooksLoading(true)
-            const response = await bookstoreApi.getBooks()
-            setBooks(response.data)
-        } catch (error) {
-            handleLogError(error as AxiosError)
-        } finally {
-            setIsBooksLoading(false)
-        }
-    }
+        const getBooksParams = {
+            currentPage: currentPage,
+            pageSize: PAGE_SIZE,
+        } as GetBooksParams;
 
-    const handleSearchBook = async () => {
-        try {
-            const response = await bookstoreApi.getBooks(bookTextSearch)
-            const books = response.data
-            setBooks(books)
-        } catch (error) {
-            handleLogError(error as AxiosError)
-            setBooks([])
+        if (bookTextSearch !== '') {
+            getBooksParams.text = bookTextSearch;
         }
-    }
+
+        bookstoreApi.getBooks(getBooksParams)
+            .then((response) => {
+                setBooks(response.data.content);
+                setTotalPages(response.data.page.totalPages);
+            })
+            .catch((error: AxiosError) => handleLogError(error))
+            .finally(() => setIsBooksLoading(false));
+
+    }, [currentPage, bookTextSearch]);
 
     if (getUserRole() !== 'USER') {
         return <Navigate to='/'/>
@@ -53,13 +62,65 @@ function CartPage()
 
     return (
         <Container>
-            <CartList
-                isBooksLoading={isBooksLoading}
-                bookTextSearch={bookTextSearch}
-                books={books}
-                handleInputChange={handleInputChange}
-                handleSearchBook={handleSearchBook}
-            />
+            <Paper
+                withBorder
+                p='md'
+                mt='xs'
+                radius='md'
+                style={{borderColor: 'var(--mantine-color-blue-6)'}}
+            >
+                <Box pos='relative'>
+
+                    <LoadingOverlay visible={isBooksLoading}/>
+                    <Grid mb='md' align='center'>
+                        <Grid.Col span={{base: 12, sm: 3}}>
+                            <Title order={2}>
+                                <IconShoppingCart
+                                    size={24}
+                                    style={{ marginRight: 8, verticalAlign: 'middle' }}
+                                />
+                                Shopping Cart
+                            </Title>
+                        </Grid.Col>
+                        <Grid.Col span={{base: 12, sm: 9}}>
+                            <TextInput
+                                placeholder='Search by ISBN or Title'
+                                value={searchText}
+                                onChange={e => setSearchText(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key !== 'Enter') {
+                                        return;
+                                    }
+
+                                    if (searchText !== bookTextSearch) {
+                                        setCurrentPage(1);
+                                        setBookTextSearch(searchText);
+                                    }
+                                }}
+                                rightSection={
+                                    <ActionIcon aria-label="Search" style={{cursor: 'pointer'}}
+                                        onClick={() => {
+                                            if (searchText !== bookTextSearch) {
+                                                setCurrentPage(1);
+                                                setBookTextSearch(searchText);
+                                            }
+                                        }}
+                                    >
+                                        <IconSearch size={16}/>
+                                    </ActionIcon>
+                                }
+                            />
+                        </Grid.Col>
+                    </Grid>
+
+                    <CartList books={books}/>
+
+                    <Flex justify="flex-end">
+                        <Pagination value={currentPage} total={totalPages} onChange={setCurrentPage} mt="xs"/>
+                    </Flex>
+
+                </Box>
+            </Paper>
         </Container>
     )
 }

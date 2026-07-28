@@ -1,15 +1,15 @@
 import {createContext, useContext, useState, useEffect} from 'react'
 import type {ReactNode} from 'react';
 
-interface IAuthContext {
-    jwtUserData: IJwtUserData|null;
-    getJwtUserData: () => IJwtUserData|null;
+type AuthContextValue = {
+    jwtUserData: JwtUserData|null;
+    getJwtUserData: () => JwtUserData|null;
     userIsAuthenticated: () => boolean;
     userLoggedIn: (user: any) => void;
     userLoggedOut: () => void;
 }
 
-export interface IJwtUserData {
+export type JwtUserData = {
     data: {
         iat: number;
         exp: number;
@@ -25,10 +25,10 @@ export interface IJwtUserData {
     accessToken: string
 }
 
-export function getJwtUserData(): IJwtUserData|null {
+export function getJwtUserData(): JwtUserData|null {
     const jwtUserDataJson = localStorage.getItem('com.abidimi.bookstore.user');
     return jwtUserDataJson
-        ? JSON.parse(jwtUserDataJson) as IJwtUserData
+        ? JSON.parse(jwtUserDataJson) as JwtUserData
         : null;
 }
 
@@ -39,7 +39,7 @@ export function getUserRole(): string|null {
         : null;
 }
 
-const AuthContext = createContext<IAuthContext>({
+const AuthContext = createContext<AuthContextValue>({
     jwtUserData: null,
     getJwtUserData: () => null,
     userIsAuthenticated: () => false,
@@ -47,17 +47,17 @@ const AuthContext = createContext<IAuthContext>({
     userLoggedOut: () => {}
 });
 
-interface AppProviderProps {
+type AppProviderProps = {
     children: ReactNode;
 }
 
 function AuthProvider({children}: AppProviderProps) {
-    const [jwtUserData, setJwtUserData] = useState<IJwtUserData | null>(null)
+    const [jwtUserData, setJwtUserData] = useState<JwtUserData | null>(null)
 
-    const getJwtUserData = (): IJwtUserData|null => {
+    const getJwtUserData = (): JwtUserData|null => {
         const jwtUserDataJson = localStorage.getItem('com.abidimi.bookstore.user');
         return jwtUserDataJson
-            ? JSON.parse(jwtUserDataJson) as IJwtUserData
+            ? JSON.parse(jwtUserDataJson) as JwtUserData
             : null;
     }
 
@@ -87,7 +87,7 @@ function AuthProvider({children}: AppProviderProps) {
         return true
     }
 
-    const userLoggedIn = (jwtUserData: IJwtUserData): void => {
+    const userLoggedIn = (jwtUserData: JwtUserData): void => {
         localStorage.setItem('com.abidimi.bookstore.user', JSON.stringify(jwtUserData))
         setJwtUserData(jwtUserData)
     }
@@ -97,7 +97,7 @@ function AuthProvider({children}: AppProviderProps) {
         setJwtUserData(null)
     }
 
-    const contextValue: IAuthContext = {
+    const contextValue: AuthContextValue = {
         jwtUserData: jwtUserData,
         getJwtUserData: getJwtUserData,
         userIsAuthenticated: userIsAuthenticated,
@@ -112,7 +112,7 @@ function AuthProvider({children}: AppProviderProps) {
 
 // export default AuthContext
 
-export function useAuthContext(): IAuthContext {
+export function useAuthContext(): AuthContextValue {
     return useContext(AuthContext)
 }
 

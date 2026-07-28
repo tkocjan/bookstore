@@ -1,39 +1,47 @@
 import axios from 'axios'
 import {config} from '../../Constants'
 // import {parseJwt} from './Helpers'
-import {type IJwtUserData, getJwtUserData} from "../context/AuthContext.tsx";
+import {type JwtUserData, getJwtUserData} from "../context/AuthContext.tsx";
 
-interface ISignupInputData {
+export const PAGE_SIZE: number = 5;
+
+export type SignupInputData = {
     username: string;
     password: string;
     name: string;
     email: string;
-}
+};
 
-interface IOrderInputData {
+export type OrderInputData = {
     description: string;
-}
+};
 
-export interface IOrderDto {
+export type OrderDto = {
     id: string;
     description: string;
-    user: IUserDto;
+    user: UserDto;
     createdAt: string;
-}
+};
 
-export interface IUserDto {
+export type UserDto = {
     id: number;
     username: string;
     name: string;
     email: string;
     role: string;
-    orders: IOrderDto[];
-}
+    orders: OrderDto[];
+};
 
-export interface IBookDto {
+export type GetBooksParams = {
+    currentPage: number;
+    pageSize: number;
+    text?: string;
+};
+
+export type BookDto = {
     isbn: string;
     title: string;
-}
+};
 
 export const bookstoreApi = {
     authenticate,
@@ -49,7 +57,7 @@ export const bookstoreApi = {
     deleteBook,
     addBook,
     getUserMe
-}
+};
 
 function authenticate(username: string, password: string) {
     return instance.post(
@@ -61,7 +69,7 @@ function authenticate(username: string, password: string) {
     )
 }
 
-function signup(signupData: ISignupInputData) {
+function signup(signupData: SignupInputData) {
     return instance.post('/auth/signup', signupData, {
         headers: {'Content-type': 'application/json'}
     })
@@ -93,7 +101,7 @@ function deleteOrder(orderId: string) {
     return instance.delete(`/api/orders/${orderId}`);
 }
 
-function createOrder(order: IOrderInputData) {
+function createOrder(order: OrderInputData) {
     return instance.post('/api/orders', order);
 }
 
@@ -101,8 +109,10 @@ function getUserMe() {
     return instance.get('/api/users/me');
 }
 
-function getBooks(text?: string) {
-    const url = text ? `/public/books?text=${text}` : '/public/books'
+function getBooks({currentPage, pageSize, text}: GetBooksParams) {
+
+    let url = `/public/books?currentPage=${currentPage-1}&pageSize=${pageSize}`;
+    url = text ? url + `&text=${text}` : url;
     return instance.get(url);
 }
 
@@ -110,7 +120,7 @@ function deleteBook(isbn: string) {
     return instance.delete(`/api/books/${isbn}`);
 }
 
-function addBook(book: IBookDto) {
+function addBook(book: BookDto) {
     return instance.post('/api/books', book);
 }
 
@@ -154,6 +164,6 @@ instance.interceptors.request.use(
 
 // -- Helper functions
 
-function bearerAuth(user: IJwtUserData): string {
+function bearerAuth(user: JwtUserData): string {
     return `Bearer ${user.accessToken}`
 }

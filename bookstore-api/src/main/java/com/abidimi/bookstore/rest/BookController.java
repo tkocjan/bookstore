@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +26,28 @@ public class BookController {
     private final BookService bookService;
 
 //    @Operation(security = {@SecurityRequirement(name = BASIC_AUTH_SECURITY_SCHEME)})
-    @GetMapping("/public/books")
-    public List<BookDto> getBooks(@RequestParam(value = "text", required = false) String text) {
-        List<Book> books = (text == null || text.isBlank())
-            ? bookService.getBooks()
-            : bookService.getBooksContainingText(text);
+//    @GetMapping("/public/books/old")
+//    public List<BookDto> getBooks(
+//        @RequestParam(value = "text", required = false) String text
+//    ) {
+//        List<Book> books = (text == null || text.isBlank())
+//            ? bookService.getBooks()
+//            : bookService.getBooksContainingText(text);
+//
+//        return books.stream().map(BookDto::from).toList();
+//    }
 
-        return books.stream().map(BookDto::from).toList();
+//    @Operation(security = {@SecurityRequirement(name = BASIC_AUTH_SECURITY_SCHEME)})
+    @GetMapping("/public/books")
+    public Page<Book> getBooks(
+        @PageableDefault(size = 2) Pageable pageable,
+        @RequestParam(value = "text", required = false) String text
+    ) {
+        Page<Book> pagedBooks = (text == null || text.isBlank())
+                ? bookService.getBooks(pageable)
+                : bookService.getBooksContainingText(text, pageable);
+
+        return pagedBooks;
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
