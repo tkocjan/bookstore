@@ -13,7 +13,7 @@ import Login from './components/home/Login'
 import Signup from './components/home/Signup'
 import BooksPage from './components/books/BooksPage'
 import AdminPage from './components/admin/AdminPage'
-import OrdersPage from './components/orders/OrdersPage'
+import UserOrdersPage from './components/orders/UserOrdersPage.tsx'
 import CartPage from './components/cart/CartPage'
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
                     path='/orderspage'
                     element={
                         <PrivateRoute>
-                            <OrdersPage />
+                            <UserOrdersPage />
                         </PrivateRoute>
                     }
                 />

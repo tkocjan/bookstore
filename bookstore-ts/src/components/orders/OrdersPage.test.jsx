@@ -6,7 +6,7 @@ import {
   seedLocalStorage,
   makeToken
 } from '../../test-utils'
-import OrdersPage from './OrdersPage.tsx'
+import UserOrdersPage from './UserOrdersPage.tsx'
 import { bookstoreApi } from '../misc/BookstoreApi.ts'
 
 vi.mock('../misc/OrderApi')
@@ -34,7 +34,7 @@ describe('UserPage', () => {
     seedLocalStorage(user)
     bookstoreApi.getUserMe.mockResolvedValue({ data: userMeResponse })
 
-    render(<OrdersPage />, { initialRoute: '/userpage' })
+    render(<UserOrdersPage />, { initialRoute: '/userpage' })
     expect(screen.queryByText('Orders')).not.toBeInTheDocument()
   })
 
@@ -42,7 +42,7 @@ describe('UserPage', () => {
     seedLocalStorage(makeRegularUser())
     bookstoreApi.getUserMe.mockResolvedValue({ data: userMeResponse })
 
-    render(<OrdersPage />)
+    render(<UserOrdersPage />)
 
     await waitFor(() => {
       expect(bookstoreApi.getUserMe).toHaveBeenCalledTimes(1)
@@ -55,7 +55,7 @@ describe('UserPage', () => {
     bookstoreApi.getUserMe.mockResolvedValue({ data: userMeResponse })
     bookstoreApi.createOrder.mockResolvedValue({})
 
-    render(<OrdersPage />)
+    render(<UserOrdersPage />)
     await waitFor(() =>
       expect(screen.getByText('Buy coffee')).toBeInTheDocument()
     )
@@ -81,7 +81,7 @@ describe('UserPage', () => {
       })
     )
 
-    const { container } = render(<OrdersPage />)
+    const { container } = render(<UserOrdersPage />)
 
     expect(
       container.querySelector('.mantine-LoadingOverlay-root')

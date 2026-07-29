@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react'
 import { render } from '../../test-utils'
-import OrdersTable from './OrdersTable.tsx'
+import UserOrderList from './UserOrderList.tsx'
 
 const mockOrders = [
   { id: 'o1', createdAt: '2024-01-01', description: 'Buy coffee' },
@@ -20,17 +20,17 @@ function makeProps(overrides = {}) {
 
 describe('user/OrderTable', () => {
   it('shows "No order" when orders is null', () => {
-    render(<OrdersTable {...makeProps({ orders: null })} />)
+    render(<UserOrderList {...makeProps({ orders: null })} />)
     expect(screen.getByText('No order')).toBeInTheDocument()
   })
 
   it('shows "No order" when orders array is empty', () => {
-    render(<OrdersTable {...makeProps({ orders: [] })} />)
+    render(<UserOrderList {...makeProps({ orders: [] })} />)
     expect(screen.getByText('No order')).toBeInTheDocument()
   })
 
   it('renders a row for each order', () => {
-    render(<OrdersTable {...makeProps({ orders: mockOrders })} />)
+    render(<UserOrderList {...makeProps({ orders: mockOrders })} />)
     expect(screen.getByText('Buy coffee')).toBeInTheDocument()
     expect(screen.getByText('Buy tea')).toBeInTheDocument()
     expect(screen.getByText('o1')).toBeInTheDocument()
@@ -38,18 +38,18 @@ describe('user/OrderTable', () => {
   })
 
   it('renders the OrderForm for creating new orders', () => {
-    render(<OrdersTable {...makeProps()} />)
+    render(<UserOrderList {...makeProps()} />)
     expect(screen.getByPlaceholderText('Description *')).toBeInTheDocument()
   })
 
   it('shows the Orders heading', () => {
-    render(<OrdersTable {...makeProps()} />)
+    render(<UserOrderList {...makeProps()} />)
     expect(screen.getByText('Orders')).toBeInTheDocument()
   })
 
   it('shows the loading overlay when isLoading is true', () => {
     const { container } = render(
-      <OrdersTable {...makeProps({ isLoading: true })} />
+      <UserOrderList {...makeProps({ isLoading: true })} />
     )
     expect(
       container.querySelector('.mantine-LoadingOverlay-root')
@@ -58,7 +58,7 @@ describe('user/OrderTable', () => {
 
   it('does not show the loading overlay when isLoading is false', () => {
     const { container } = render(
-      <OrdersTable {...makeProps({ isLoading: false })} />
+      <UserOrderList {...makeProps({ isLoading: false })} />
     )
     expect(
       container.querySelector('.mantine-LoadingOverlay-root')
