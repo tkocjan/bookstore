@@ -12,5 +12,5 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     Page<Book> findAllByOrderByTitle(Pageable pageable);
 
-    Page<Book> findByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(String isbn, String title, Pageable pageable);
+    Page<Book> findAllByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(String isbn, String title, Pageable pageable);
 }

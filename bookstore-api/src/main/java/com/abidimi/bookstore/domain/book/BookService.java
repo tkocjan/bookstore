@@ -22,14 +22,15 @@ public class BookService {
   }
 
   public Page<Book> getBooksContainingText(String text, Pageable pageable) {
-    return bookRepository.findByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(text, text, pageable);
+    return bookRepository.findAllByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(text, text, pageable);
   }
 
   public Book validateAndGetBook(String isbn) {
     return bookRepository
         .findById(isbn)
         .orElseThrow(
-            () -> new BookNotFoundException("Book with isbn %s not found".formatted(isbn)));
+            () -> new BookNotFoundException("Book with isbn %s not found".formatted(isbn))
+        );
   }
 
   public Book saveBook(Book book) {
