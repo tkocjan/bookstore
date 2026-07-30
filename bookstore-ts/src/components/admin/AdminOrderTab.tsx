@@ -1,14 +1,19 @@
 import {type ChangeEvent as ReactChangeEvent, type SubmitEvent as ReactSubmitEvent, useEffect, useState} from "react";
 import {Grid, Group, TextInput, ActionIcon, Tabs, Box, LoadingOverlay} from '@mantine/core'
+import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
 import {IconSearch} from '@tabler/icons-react'
+
 import OrderForm from '../misc/OrderForm.tsx'
 import {bookstoreApi, type OrderInputData} from '../misc/BookstoreApi'
 import {handleLogError} from "../misc/Helpers.ts";
-import type {AxiosError} from "axios";
 import AdminOrderList from "./AdminOrderList.tsx";
 
 
-function AdminOrderTab() {
+function AdminOrderTab()
+{
+    const {t} = useTranslation("common");
+
     const [orders, setOrders] = useState([])
     const [orderDescription, setOrderDescription] = useState('')
     const [orderTextSearch, setOrderTextSearch] = useState('')
@@ -90,7 +95,7 @@ function AdminOrderTab() {
                             <Group>
                                 <TextInput
                                     name='orderTextSearch'
-                                    placeholder='Search by Id or Description'
+                                    placeholder={t("Search by Id or Description")}
                                     value={orderTextSearch}
                                     onChange={handleInputChange}
                                 />

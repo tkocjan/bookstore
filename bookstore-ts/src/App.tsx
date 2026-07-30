@@ -1,9 +1,9 @@
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Routes,
   Route,
   Navigate
-} from 'react-router-dom'
+} from 'react-router'
 import { AppShell } from '@mantine/core'
 import { AuthProvider } from './components/context/AuthContext'
 import PrivateRoute from './components/misc/PrivateRoute'
@@ -19,7 +19,7 @@ import CartPage from './components/cart/CartPage'
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <BrowserRouter>
         <AppShell header={{ height: 60 }} padding='md'>
           <Navbar />
           <AppShell.Main>
@@ -28,35 +28,14 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
                 <Route path='/bookspage' element={<BooksPage />} />
-                <Route
-                    path='/adminpage'
-                    element={
-                        <PrivateRoute>
-                            <AdminPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path='/orderspage'
-                    element={
-                        <PrivateRoute>
-                            <UserOrdersPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path='/cartpage'
-                    element={
-                        <PrivateRoute>
-                            <CartPage />
-                        </PrivateRoute>
-                    }
-                />
+                <Route path='/adminpage' element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+                <Route path='/orderspage' element={<PrivateRoute><UserOrdersPage /></PrivateRoute>} />
+                <Route path='/cartpage' element={<PrivateRoute><CartPage /></PrivateRoute>} />
                 <Route path='*' element={<Navigate to='/' />} />
             </Routes>
           </AppShell.Main>
         </AppShell>
-      </Router>
+      </BrowserRouter>
     </AuthProvider>
   )
 }

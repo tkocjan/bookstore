@@ -8,14 +8,18 @@ import {
     LoadingOverlay
 } from '@mantine/core'
 import {IconUsers, IconDeviceLaptop} from '@tabler/icons-react'
+import type {AxiosError} from "axios";
+import { useTranslation } from "react-i18next";
+
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {handleLogError} from '../misc/Helpers.ts'
-import type {AxiosError} from "axios";
 
 function Home() {
     const [numberOfUsers, setNumberOfUsers] = useState(null)
     const [numberOfOrders, setNumberOfOrders] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+
+    const { t } = useTranslation("common");
 
     useEffect(() => {
         bookstoreApi.numberOfUsers()
@@ -43,14 +47,14 @@ function Home() {
                         <Text size='3rem' fw={700}>
                             {numberOfUsers}
                         </Text>
-                        <Text c='dimmed'>Users</Text>
+                        <Text c='dimmed'>{t("Users")}</Text>
                     </Paper>
                     <Paper withBorder p='xl' radius='md' ta='center'>
                         <IconDeviceLaptop size={32} color='gray'/>
                         <Text size='3rem' fw={700}>
                             {numberOfOrders}
                         </Text>
-                        <Text c='dimmed'>Orders</Text>
+                        <Text c='dimmed'>{t("Orders")}</Text>
                     </Paper>
                 </SimpleGrid>
             </Box>

@@ -1,11 +1,16 @@
-import {Navigate} from 'react-router-dom'
+import {Navigate} from 'react-router'
 import {Container, Tabs} from '@mantine/core'
-import {getUserRole} from '../context/AuthContext.tsx'
+import {useTranslation} from "react-i18next";
 import {IconDeviceLaptop, IconUsers} from "@tabler/icons-react";
+
+import {getUserRole} from '../context/AuthContext.tsx'
 import UsersTab from "./UsersTab.tsx";
 import AdminOrderTab from "./AdminOrderTab.tsx";
 
-function AdminPage() {
+function AdminPage()
+{
+    const {t} = useTranslation("common");
+
     if (getUserRole() !== 'ADMIN') {
         return <Navigate to='/'/>
     }
@@ -16,10 +21,10 @@ function AdminPage() {
 
                 <Tabs.List>
                     <Tabs.Tab value='users' leftSection={<IconUsers size={16}/>}>
-                        Users
+                        {t("Users")}
                     </Tabs.Tab>
                     <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16}/>}>
-                        Orders
+                        {t("Orders")}
                     </Tabs.Tab>
                 </Tabs.List>
 

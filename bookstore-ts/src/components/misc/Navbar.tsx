@@ -1,81 +1,88 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { Group, Button, Anchor, AppShell, Text } from '@mantine/core'
-import { getJwtUserData, getUserRole, useAuthContext } from '../context/AuthContext.tsx'
+import {Link, useNavigate} from 'react-router'
+import {Group, Button, Anchor, AppShell, Text} from '@mantine/core'
+import {useTranslation} from "react-i18next";
 
-function Navbar() {
-  const { userIsAuthenticated, userLoggedOut } = useAuthContext()
-  const navigate = useNavigate()
+import {getJwtUserData, getUserRole, useAuthContext} from '../context/AuthContext.tsx'
+import {LanguageSwitcher} from "./LanguageSwitcher.tsx";
 
-  const isAuthenticated = userIsAuthenticated()
-  const user = getJwtUserData()
-  const isAdmin = getUserRole() === 'ADMIN'
-  const isUser = getUserRole() === 'USER'
-  const userName = user ? user.data.name : ''
+function Navbar()
+{
+    const {t} = useTranslation("common");
 
-  const handleLogout = () => {
-    userLoggedOut()
-    navigate('/')
-  }
+    const {userIsAuthenticated, userLoggedOut} = useAuthContext()
+    const navigate = useNavigate()
 
-  return (
-      <AppShell.Header p='sm' bg='violet'>
-          <Group justify='space-between' h='100%'>
-              <Group>
-                  <Text fw={700} size='lg' c='white'>
-                      Bookstore
-                  </Text>
-                  <Anchor component={Link} to='/' c='white'>
-                      Home
-                  </Anchor>
-                  <Anchor component={Link} to='/bookspage' c='white'>
-                      Books
-                  </Anchor>
-                  {isAdmin && (
-                      <Anchor component={Link} to='/adminpage' c='white'>
-                          AdminPage
-                      </Anchor>
-                  )}
-                  {isUser && (
-                      <Anchor component={Link} to='/orderspage' c='white'>
-                          Orders
-                      </Anchor>
-                  )}
-              </Group>
-              <Group>
-                  {!isAuthenticated && (
-                      <Anchor component={Link} to='/login' c='white'>
-                          Login
-                      </Anchor>
-                  )}
-                  {!isAuthenticated && (
-                      <Anchor component={Link} to='/signup' c='white'>
-                          Sign Up
-                      </Anchor>
-                  )}
-                  {isAuthenticated && (
-                      <Text size='sm' c='white'>
-                          Hi, {userName}!
-                      </Text>
-                  )}
-                  {isUser && (
-                      <Anchor component={Link} to='/cartpage' c='white'>
-                          Cart
-                      </Anchor>
-                  )}
-                  {isAuthenticated && (
-                      <Button
-                          variant='white'
-                          color='violet'
-                          size='sm'
-                          onClick={handleLogout}
-                      >
-                          Logout
-                      </Button>
-                  )}
-              </Group>
-          </Group>
-      </AppShell.Header>
-  )
+    const isAuthenticated = userIsAuthenticated()
+    const user = getJwtUserData()
+    const isAdmin = getUserRole() === 'ADMIN'
+    const isUser = getUserRole() === 'USER'
+    const userName = user ? user.data.name : ''
+
+    const handleLogout = () => {
+        userLoggedOut()
+        navigate('/')
+    }
+
+    return (
+        <AppShell.Header p='sm' bg='violet'>
+            <Group justify='space-between' h='100%'>
+                <Group>
+                    <Text fw={700} size='lg' c='white'>
+                        {t("Bookstore")}
+                    </Text>
+                    <Anchor component={Link} to='/' c='white'>
+                        {t("Home")}
+                    </Anchor>
+                    <Anchor component={Link} to='/bookspage' c='white'>
+                        {t("Books")}
+                    </Anchor>
+                    {isAdmin && (
+                        <Anchor component={Link} to='/adminpage' c='white'>
+                            {t("Admin")}
+                        </Anchor>
+                    )}
+                    {isUser && (
+                        <Anchor component={Link} to='/orderspage' c='white'>
+                            {t("Orders")}
+                        </Anchor>
+                    )}
+                </Group>
+                <Group>
+                    {!isAuthenticated && (
+                        <Anchor component={Link} to='/login' c='white'>
+                            {t("Login")}
+                        </Anchor>
+                    )}
+                    {!isAuthenticated && (
+                        <Anchor component={Link} to='/signup' c='white'>
+                            {t("Sign Up")}
+                        </Anchor>
+                    )}
+                    {isAuthenticated && (
+                        <Text size='sm' c='white'>
+                            {t("Hi")}, {userName}!
+                        </Text>
+                    )}
+                    {isUser && (
+                        <Anchor component={Link} to='/cartpage' c='white'>
+                            {t("Cart")}
+                        </Anchor>
+                    )}
+                    {isAuthenticated && (
+                        <Button
+                            variant='white'
+                            color='violet'
+                            size='sm'
+                            onClick={handleLogout}
+                        >
+                            {t("Logout")}
+                        </Button>
+                    )}
+                    <LanguageSwitcher />
+                </Group>
+            </Group>
+        </AppShell.Header>
+    )
 }
 
 export default Navbar

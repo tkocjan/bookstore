@@ -3,18 +3,21 @@ import {
     type ChangeEvent as ReactChangeEvent,
     type SubmitEvent as ReactSubmitEvent,
 } from 'react'
-import {Navigate} from 'react-router-dom'
+import {Navigate} from 'react-router'
 import {Box, Container, Grid, Group, LoadingOverlay, Title} from '@mantine/core'
+import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
+import {IconDeviceLaptop} from "@tabler/icons-react";
+
 import UserOrderList from './UserOrderList.tsx'
 import {getUserRole} from '../context/AuthContext.tsx'
 import {bookstoreApi, type OrderInputData} from '../misc/BookstoreApi.ts'
 import {handleLogError} from '../misc/Helpers.ts'
-import type {AxiosError} from "axios";
 import type {UserDto} from "../misc/BookstoreApi.tsx";
-import {IconDeviceLaptop} from "@tabler/icons-react";
 import OrderForm from "../misc/OrderForm.tsx";
 
 function UserOrdersPage() {
+    const {t} = useTranslation("common");
 
     const [userDtoMe, setUserDtoMe] = useState<UserDto | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +75,7 @@ function UserOrdersPage() {
                     <Grid.Col span={{ base: 12, sm: 3 }}>
                         <Group>
                             <IconDeviceLaptop size={28} />
-                            <Title order={2}>Orders</Title>
+                            <Title order={2}>{t("Orders")}</Title>
                         </Group>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, sm: 9 }}>

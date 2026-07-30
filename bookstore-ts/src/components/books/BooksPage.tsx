@@ -14,13 +14,17 @@ import {
     Title
 } from '@mantine/core'
 import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
+import {IconBook, IconSearch} from "@tabler/icons-react";
+
 import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi'
 import BookList from './BookList.tsx'
 import {handleLogError} from '../misc/Helpers'
-import {IconBook, IconSearch} from "@tabler/icons-react";
 
 function BooksPage()
 {
+    const {t} = useTranslation("common");
+
     const [books, setBooks] = useState([]);
     const [bookTextSearch, setBookTextSearch] = useState('');
     const [isBooksLoading, setIsBooksLoading] = useState(false);
@@ -74,12 +78,12 @@ function BooksPage()
                                     size={24}
                                     style={{ marginRight: 8, verticalAlign: 'middle' }}
                                 />
-                                Books
+                                {t("Books")}
                             </Title>
                         </Grid.Col>
                         <Grid.Col span={{base: 12, sm: 9}}>
                             <TextInput
-                                placeholder='Search by ISBN or Title'
+                                placeholder={t("Search by ISBN or Title")}
                                 value={searchText}
                                 onChange={e => setSearchText(e.target.value)}
                                 onKeyDown={e => {

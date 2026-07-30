@@ -1,15 +1,20 @@
-import {Group, TextInput, ActionIcon, LoadingOverlay, Tabs, Box} from '@mantine/core'
-import { IconSearch } from '@tabler/icons-react'
-import {bookstoreApi} from '../misc/BookstoreApi'
 import {type ChangeEvent as ReactChangeEvent, type SubmitEvent as ReactSubmitEvent, useEffect, useState} from "react";
+import {Group, TextInput, ActionIcon, LoadingOverlay, Tabs, Box} from '@mantine/core'
+import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
+import { IconSearch } from '@tabler/icons-react'
+
+import {bookstoreApi} from '../misc/BookstoreApi'
 import UserList from "./UserList.tsx";
 import {handleLogError} from "../misc/Helpers.ts";
-import type {AxiosError} from "axios";
 
-function UsersTab() {
-    const [users, setUsers] = useState([])
-    const [userUsernameSearch, setUserUsernameSearch] = useState('')
-    const [isUsersLoading, setIsUsersLoading] = useState(true)
+function UsersTab()
+{
+    const {t} = useTranslation("common");
+
+    const [users, setUsers] = useState([]);
+    const [userUsernameSearch, setUserUsernameSearch] = useState('');
+    const [isUsersLoading, setIsUsersLoading] = useState(true);
 
     useEffect(() => {
         handleGetUsers()
@@ -67,7 +72,7 @@ function UsersTab() {
                     <Group mb='md'>
                         <TextInput
                             name='userUsernameSearch'
-                            placeholder='Search by Username'
+                            placeholder={t("Search by Username")}
                             value={userUsernameSearch}
                             onChange={handleInputChange}
                         />

@@ -1,5 +1,7 @@
 import { ActionIcon, Table } from '@mantine/core'
+import {useTranslation} from "react-i18next";
 import { IconTrash } from '@tabler/icons-react'
+
 import type {UserDto} from "../misc/BookstoreApi.tsx";
 
 type UserListProps = {
@@ -11,12 +13,14 @@ function UserList({
    users,
    handleDeleteUser,
 }: UserListProps) {
+    const {t} = useTranslation("common");
+
     let userList
     if (users.length === 0) {
         userList = (
             <Table.Tr key='no-user'>
                 <Table.Td colSpan={6} ta='center'>
-                    No user
+                    {t("No users")}
                 </Table.Td>
             </Table.Tr>
         )
@@ -48,11 +52,11 @@ function UserList({
             <Table.Thead>
                 <Table.Tr>
                     <Table.Th w={40}/>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Username</Table.Th>
-                    <Table.Th>Name</Table.Th>
-                    <Table.Th>Email</Table.Th>
-                    <Table.Th>Role</Table.Th>
+                    <Table.Th> {t("ID")}</Table.Th>
+                    <Table.Th> {t("Username")}</Table.Th>
+                    <Table.Th> {t("Name")}</Table.Th>
+                    <Table.Th> {t("Email")}</Table.Th>
+                    <Table.Th> {t("Role")}</Table.Th>
                 </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{userList}</Table.Tbody>

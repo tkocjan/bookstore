@@ -1,5 +1,5 @@
 import {useState, type SubmitEvent as ReactSubmitEvent} from 'react'
-import {NavLink, Navigate} from 'react-router-dom'
+import {NavLink, Navigate} from 'react-router'
 import {
     TextInput,
     PasswordInput,
@@ -11,13 +11,18 @@ import {
     Center,
     Box
 } from '@mantine/core'
+import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
 import {IconInfoCircle} from '@tabler/icons-react'
+
 import {useAuthContext} from '../context/AuthContext.tsx'
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {parseJwt, handleLogError} from '../misc/Helpers.ts'
-import type {AxiosError} from "axios";
 
-function Login() {
+function Login()
+{
+    const {t} = useTranslation("common");
+
     const authContext = useAuthContext()
     const isLoggedIn = authContext.userIsAuthenticated()
 
@@ -65,31 +70,31 @@ function Login() {
                             <TextInput
                                 autoFocus
                                 name='username'
-                                label='Username'
+                                label={t("Username")}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                             <PasswordInput
                                 name='password'
-                                label='Password'
+                                label={t("Password")}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <Button type='submit' color='violet' fullWidth>
-                                Login
+                                {t("Login")}
                             </Button>
                         </Stack>
                     </Paper>
                 </form>
                 <Paper withBorder p='sm' radius='md' mt='sm' ta='center' shadow='sm'>
-                    Don&apos;t have an account?{' '}
+                    {t("Don't have an account?") + ' '}{' '}
                     <Anchor component={NavLink} to='/signup' c='violet'>
-                        Sign Up
+                        {t("Sign Up")}
                     </Anchor>
                 </Paper>
                 {isError && (
                     <Alert color='red' variant='light' mt='sm' icon={<IconInfoCircle/>}>
-                        The username or password provided are incorrect!
+                        {t("The username or password provided are incorrect!")}
                     </Alert>
                 )}
             </Box>

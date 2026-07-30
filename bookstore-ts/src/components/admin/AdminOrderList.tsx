@@ -1,5 +1,7 @@
-import {ActionIcon, Table} from '@mantine/core'
 import {IconTrash} from '@tabler/icons-react'
+import {ActionIcon, Table} from '@mantine/core'
+import {useTranslation} from "react-i18next";
+
 import type {OrderDto} from "../misc/BookstoreApi.tsx";
 
 type AdminOrderListProps = {
@@ -7,18 +9,21 @@ type AdminOrderListProps = {
     handleDeleteOrder: (orderId: string) => void;
 };
 
-function AdminOrderList(props: AdminOrderListProps) {
+function AdminOrderList(props: AdminOrderListProps)
+{
     const {
         orders,
         handleDeleteOrder,
     } = props;
+
+    const {t} = useTranslation("common");
 
     let orderList
     if (orders.length === 0) {
         orderList = (
             <Table.Tr key='no-order'>
                 <Table.Td colSpan={5} ta='center'>
-                    No order
+                    {t("No orders")}
                 </Table.Td>
             </Table.Tr>
         )
@@ -48,10 +53,10 @@ function AdminOrderList(props: AdminOrderListProps) {
             <Table.Thead>
                 <Table.Tr>
                     <Table.Th w={40}/>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Username</Table.Th>
-                    <Table.Th>Created At</Table.Th>
-                    <Table.Th>Description</Table.Th>
+                    <Table.Th>{t("ID")}</Table.Th>
+                    <Table.Th>{t("Username")}</Table.Th>
+                    <Table.Th>{t("Created At")}</Table.Th>
+                    <Table.Th>{t("Description")}</Table.Th>
                 </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{orderList}</Table.Tbody>

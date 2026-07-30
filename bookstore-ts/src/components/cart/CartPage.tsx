@@ -1,7 +1,7 @@
 import {
     useEffect, useState, useCallback,
 } from 'react'
-import {Navigate} from 'react-router-dom'
+import {Navigate} from 'react-router'
 import {
     ActionIcon,
     Box,
@@ -14,15 +14,19 @@ import {
     TextInput,
     Title
 } from '@mantine/core'
+import type {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
+
 import CartList from './CartList'
 import {getUserRole} from '../context/AuthContext'
 import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi.js'
 import {handleLogError} from '../misc/Helpers'
-import type {AxiosError} from "axios";
 import {IconSearch, IconShoppingCart} from "@tabler/icons-react";
 
 function CartPage()
 {
+    const {t} = useTranslation("common");
+
     const [books, setBooks] = useState([])
     const [bookTextSearch, setBookTextSearch] = useState('')
     const [isBooksLoading, setIsBooksLoading] = useState(false)
@@ -79,7 +83,7 @@ function CartPage()
                                     size={24}
                                     style={{ marginRight: 8, verticalAlign: 'middle' }}
                                 />
-                                Shopping Cart
+                                {t("Shopping Cart")}
                             </Title>
                         </Grid.Col>
                         <Grid.Col span={{base: 12, sm: 9}}>
