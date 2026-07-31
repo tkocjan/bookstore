@@ -10,8 +10,8 @@ import {useTranslation} from "react-i18next";
 import {IconDeviceLaptop} from "@tabler/icons-react";
 
 import UserOrderList from './UserOrderList.tsx'
-import {getUserRole} from '../context/AuthContext.tsx'
-import {bookstoreApi, type OrderInputData} from '../misc/BookstoreApi.ts'
+import {getUserRole} from '@/context/AuthContext.tsx'
+import {bookstoreApi, type OrderInputData} from '@/components/misc/BookstoreApi.ts'
 import {handleLogError} from '../misc/Helpers.ts'
 import type {UserDto} from "../misc/BookstoreApi.tsx";
 import OrderForm from "../misc/OrderForm.tsx";

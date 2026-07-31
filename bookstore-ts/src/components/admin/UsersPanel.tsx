@@ -1,5 +1,5 @@
 import {type ChangeEvent as ReactChangeEvent, type SubmitEvent as ReactSubmitEvent, useEffect, useState} from "react";
-import {Group, TextInput, ActionIcon, LoadingOverlay, Tabs, Box} from '@mantine/core'
+import {Group, TextInput, ActionIcon, LoadingOverlay, Box} from '@mantine/core'
 import type {AxiosError} from "axios";
 import {useTranslation} from "react-i18next";
 import { IconSearch } from '@tabler/icons-react'
@@ -8,7 +8,7 @@ import {bookstoreApi} from '../misc/BookstoreApi'
 import UserList from "./UserList.tsx";
 import {handleLogError} from "../misc/Helpers.ts";
 
-function UsersTab()
+function UsersPanel()
 {
     const {t} = useTranslation("common");
 
@@ -65,26 +65,24 @@ function UsersTab()
     }
 
     return (
-        <Tabs.Panel value='users' pt='md'>
-            <Box pos='relative'>
-                <LoadingOverlay visible={isUsersLoading}/>
-                <form onSubmit={handleSearchUser}>
-                    <Group mb='md'>
-                        <TextInput
-                            name='userUsernameSearch'
-                            placeholder={t("Search by Username")}
-                            value={userUsernameSearch}
-                            onChange={handleInputChange}
-                        />
-                        <ActionIcon type='submit' variant='light' color='violet'>
-                            <IconSearch size={16}/>
-                        </ActionIcon>
-                    </Group>
-                </form>
-                <UserList users={users} handleDeleteUser={handleDeleteUser}/>
-            </Box>
-        </Tabs.Panel>
+        <Box pos='relative'>
+            <LoadingOverlay visible={isUsersLoading}/>
+            <form onSubmit={handleSearchUser}>
+                <Group mb='md'>
+                    <TextInput
+                        name='userUsernameSearch'
+                        placeholder={t("Search by Username")}
+                        value={userUsernameSearch}
+                        onChange={handleInputChange}
+                    />
+                    <ActionIcon type='submit' variant='light' color='violet'>
+                        <IconSearch size={16}/>
+                    </ActionIcon>
+                </Group>
+            </form>
+            <UserList users={users} handleDeleteUser={handleDeleteUser}/>
+        </Box>
     )
 }
 
-export default UsersTab
+export default UsersPanel

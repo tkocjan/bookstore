@@ -4,8 +4,8 @@ import {useTranslation} from "react-i18next";
 import {IconDeviceLaptop, IconUsers} from "@tabler/icons-react";
 
 import {getUserRole} from '../context/AuthContext.tsx'
-import UsersTab from "./UsersTab.tsx";
-import AdminOrderTab from "./AdminOrderTab.tsx";
+import UsersPanel from "./UsersPanel.tsx";
+import AdminOrderPanel from "./AdminOrderPanel.tsx";
 
 function AdminPage()
 {
@@ -17,7 +17,7 @@ function AdminPage()
 
     return (
         <Container>
-            <Tabs defaultValue='users' mt='md'>
+            <Tabs defaultValue='users' mt='md' keepMounted={false}>
 
                 <Tabs.List>
                     <Tabs.Tab value='users' leftSection={<IconUsers size={16}/>}>
@@ -28,9 +28,9 @@ function AdminPage()
                     </Tabs.Tab>
                 </Tabs.List>
 
-                <UsersTab/>
+                <Tabs.Panel value='users' pt='md'><UsersPanel/></Tabs.Panel>
 
-                <AdminOrderTab/>
+                <Tabs.Panel value='orders' pt='md'><AdminOrderPanel/></Tabs.Panel>
 
             </Tabs>
         </Container>

@@ -1,5 +1,5 @@
 import {type ChangeEvent as ReactChangeEvent, type SubmitEvent as ReactSubmitEvent, useEffect, useState} from "react";
-import {Grid, Group, TextInput, ActionIcon, Tabs, Box, LoadingOverlay} from '@mantine/core'
+import {Grid, Group, TextInput, ActionIcon, Box, LoadingOverlay} from '@mantine/core'
 import type {AxiosError} from "axios";
 import {useTranslation} from "react-i18next";
 import {IconSearch} from '@tabler/icons-react'
@@ -10,7 +10,7 @@ import {handleLogError} from "../misc/Helpers.ts";
 import AdminOrderList from "./AdminOrderList.tsx";
 
 
-function AdminOrderTab()
+function AdminOrderPanel()
 {
     const {t} = useTranslation("common");
 
@@ -86,38 +86,36 @@ function AdminOrderTab()
     }
 
     return (
-        <Tabs.Panel value='orders' pt='md'>
-            <Box pos='relative'>
-                <LoadingOverlay visible={isOrdersLoading}/>
-                <Grid mb='md'>
-                    <Grid.Col span={{base: 12, sm: 5}}>
-                        <form onSubmit={handleSearchOrder}>
-                            <Group>
-                                <TextInput
-                                    name='orderTextSearch'
-                                    placeholder={t("Search by Id or Description")}
-                                    value={orderTextSearch}
-                                    onChange={handleInputChange}
-                                />
-                                <ActionIcon type='submit' variant='light' color='violet'>
-                                    <IconSearch size={16}/>
-                                </ActionIcon>
-                            </Group>
-                        </form>
-                    </Grid.Col>
-                    <Grid.Col span={{base: 12, sm: 7}}>
-                        <OrderForm
-                            orderDescription={orderDescription}
-                            handleInputChange={handleInputChange}
-                            handleCreateOrder={handleCreateOrder}
-                            isLoading={isOrdersLoading}
-                        />
-                    </Grid.Col>
-                </Grid>
-                <AdminOrderList orders={orders} handleDeleteOrder={handleDeleteOrder}/>
-            </Box>
-        </Tabs.Panel>
+        <Box pos='relative'>
+            <LoadingOverlay visible={isOrdersLoading}/>
+            <Grid mb='md'>
+                <Grid.Col span={{base: 12, sm: 5}}>
+                    <form onSubmit={handleSearchOrder}>
+                        <Group>
+                            <TextInput
+                                name='orderTextSearch'
+                                placeholder={t("Search by Id or Description")}
+                                value={orderTextSearch}
+                                onChange={handleInputChange}
+                            />
+                            <ActionIcon type='submit' variant='light' color='violet'>
+                                <IconSearch size={16}/>
+                            </ActionIcon>
+                        </Group>
+                    </form>
+                </Grid.Col>
+                <Grid.Col span={{base: 12, sm: 7}}>
+                    <OrderForm
+                        orderDescription={orderDescription}
+                        handleInputChange={handleInputChange}
+                        handleCreateOrder={handleCreateOrder}
+                        isLoading={isOrdersLoading}
+                    />
+                </Grid.Col>
+            </Grid>
+            <AdminOrderList orders={orders} handleDeleteOrder={handleDeleteOrder}/>
+        </Box>
     )
 }
 
-export default AdminOrderTab
+export default AdminOrderPanel
