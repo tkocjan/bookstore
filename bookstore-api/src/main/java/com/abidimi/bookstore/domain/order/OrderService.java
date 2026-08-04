@@ -1,6 +1,7 @@
 package com.abidimi.bookstore.domain.order;
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,32 +9,47 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderService {
 
-  private final OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-  public List<Order> getOrders() {
-    return orderRepository.findAllByOrderByCreatedAtDesc();
-  }
+    public List<Order> getOrders() {
+        return orderRepository.findAllByOrderByCreatedAtDesc();
+    }
 
-  public long countOrders() {
-    return orderRepository.count();
-  }
+    public List<Order> getOrders(Long userId) {
+        return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+    }
 
-  public List<Order> getOrdersContainingText(String text) {
-    return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(
-        text, text);
-  }
+    public long countOrders() {
+        return orderRepository.count();
+    }
 
-  public Order validateAndGetOrder(String id) {
-    return orderRepository
-        .findById(id)
-        .orElseThrow(() -> new OrderNotFoundException("Order with id %s not found".formatted(id)));
-  }
+    public List<Order> getOrdersContainingText(String text) {
+        return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(
+                text,
+                text
+        );
+    }
 
-  public Order saveOrder(Order order) {
-    return orderRepository.save(order);
-  }
+    public List<Order> getOrdersContainingText(Long userId, String text) {
+        return orderRepository.findByUserIdAndIdContainingOrUserIdAndDescriptionContainingIgnoreCaseOrderByCreatedAt(
+            userId,
+            text,
+            userId,
+            text
+        );
+    }
 
-  public void deleteOrder(Order order) {
-    orderRepository.delete(order);
-  }
+    public Order validateAndGetOrder(String id) {
+        return orderRepository
+                .findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order with id %s not found".formatted(id)));
+    }
+
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public void deleteOrder(Order order) {
+        orderRepository.delete(order);
+    }
 }

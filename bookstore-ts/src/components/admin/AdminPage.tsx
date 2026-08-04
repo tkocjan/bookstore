@@ -1,4 +1,6 @@
-import {Navigate} from 'react-router'
+import {Navigate, useNavigate, useParams, Link,
+    // useLocation
+} from 'react-router'
 import {Container, Tabs} from '@mantine/core'
 import {useTranslation} from "react-i18next";
 import {IconDeviceLaptop, IconUsers} from "@tabler/icons-react";
@@ -11,19 +13,34 @@ function AdminPage()
 {
     const {t} = useTranslation("common");
 
+    const navigate = useNavigate();
+    const { tabValue } = useParams();
+    // const location = useLocation();
+
     if (getUserRole() !== 'ADMIN') {
         return <Navigate to='/'/>
     }
 
     return (
         <Container>
-            <Tabs defaultValue='users' mt='md' keepMounted={false}>
+            <Tabs mt='md' keepMounted={false}
+                value={tabValue}
+                onChange={(value) => navigate(`/adminpage/${value}`)}
+            >
 
                 <Tabs.List>
-                    <Tabs.Tab value='users' leftSection={<IconUsers size={16}/>}>
+                    <Tabs.Tab value='users' leftSection={<IconUsers size={16}/>}
+                        renderRoot={(props) => (
+                            <Link to="/adminPage/users" {...props} />
+                        )}
+                    >
                         {t("Users")}
                     </Tabs.Tab>
-                    <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16}/>}>
+                    <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16}/>}
+                        renderRoot={(props) => (
+                            <Link to="/adminPage/orders" {...props} />
+                        )}
+                    >
                         {t("Orders")}
                     </Tabs.Tab>
                 </Tabs.List>

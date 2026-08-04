@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig
 {
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
@@ -36,17 +38,17 @@ public class SecurityConfig
             authorizeHttpRequests
                 .requestMatchers(HttpMethod.POST, "/api/orders")
                 .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.GET, "/api/users/me")
-                .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.GET, "/api/orders")
-                .hasAuthority(Role.ADMIN.name())
+//                .requestMatchers(HttpMethod.GET, "/api/users/me")
+//                .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+//                .requestMatchers(HttpMethod.GET, "/api/orders")
+//                .hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/orders/**")
                 .hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.POST, "/api/books")
                 .hasAuthority(Role.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/books/**")
-                .hasAuthority(Role.ADMIN.name())
-                .requestMatchers("/api/users", "/api/users/**")
+//                .hasAuthority(Role.ADMIN.name())
+//                .requestMatchers("/api/users", "/api/users/**")
                 .hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/public/**", "/auth/**")
                 .permitAll()
@@ -61,7 +63,8 @@ public class SecurityConfig
                 )
                 .permitAll()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
+//                .authenticated()
         )
         .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(exceptionHandling ->

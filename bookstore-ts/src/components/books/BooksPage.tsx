@@ -115,7 +115,7 @@ function BooksPage()
                     <BookList books={books}/>
 
                     <Flex justify="flex-end">
-                        <Pagination value={currentPage} total={totalPages} onChange={setCurrentPage} mt="xs"/>
+                        <Pagination value={currentPage} total={totalPages} onChange={setCurrentPage} size="xs" mt="sm"/>
                     </Flex>
 
                 </Box>

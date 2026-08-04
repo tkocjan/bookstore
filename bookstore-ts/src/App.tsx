@@ -24,14 +24,24 @@ function App() {
           <Navbar />
           <AppShell.Main>
             <Routes>
+
               <Route path='/' element={<Home />} />
+
               <Route path='/login' element={<Login />} />
+
               <Route path='/signup' element={<Signup />} />
+
                 <Route path='/bookspage' element={<BooksPage />} />
-                <Route path='/adminpage' element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+
+                <Route path='/adminpage/:tabValue' element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+                <Route path='/adminpage' element={<Navigate to='/adminpage/users' />} />
+
                 <Route path='/orderspage' element={<PrivateRoute><UserOrdersPage /></PrivateRoute>} />
+
                 <Route path='/cartpage' element={<PrivateRoute><CartPage /></PrivateRoute>} />
+
                 <Route path='*' element={<Navigate to='/' />} />
+
             </Routes>
           </AppShell.Main>
         </AppShell>

@@ -10,9 +10,12 @@ import com.abidimi.bookstore.domain.user.UserDeletionNotAllowedException;
 import com.abidimi.bookstore.domain.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,41 +26,45 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
+//@RequestMapping("/api/users")
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
-  @GetMapping("/me")
-  public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-    return UserDto.from(userService.validateAndGetUserByUsername(currentUser.getUsername()));
-  }
-
-  @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
-  @GetMapping
-  public List<UserDto> getUsers() {
-    return userService.getUsers().stream().map(UserDto::from).toList();
-  }
-
-  @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
-  @GetMapping("/{username}")
-  public UserDto getUser(@PathVariable String username) {
-    return UserDto.from(userService.validateAndGetUserByUsername(username));
-  }
-
-  @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @DeleteMapping("/{username}")
-  public void deleteUser(
-      @PathVariable String username, @AuthenticationPrincipal CustomUserDetails currentUser) {
-    User user = userService.validateAndGetUserByUsername(username);
-    if (currentUser.getUsername().equals(username)) {
-      throw new UserDeletionNotAllowedException("You cannot delete your own account");
+    @GetMapping("/api/users/me")
+//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
+        return UserDto.from(userService.validateAndGetUserByUsername(currentUser.getUsername()));
     }
-    if (Role.ADMIN.equals(user.getRole()) && userService.countAdmins() == 1) {
-      throw new UserDeletionNotAllowedException("Cannot delete the last admin account");
+
+    @GetMapping("/api/users")
+//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserDto> getUsers() {
+        return userService.getUsers().stream().map(UserDto::from).toList();
     }
-    userService.deleteUser(user);
-  }
+
+    @GetMapping("/api/users/{username}")
+//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserDto getUser(@PathVariable String username) {
+        return UserDto.from(userService.validateAndGetUserByUsername(username));
+    }
+
+    @DeleteMapping("/api/users/{username}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUser(
+            @PathVariable String username, @AuthenticationPrincipal CustomUserDetails currentUser) {
+        User user = userService.validateAndGetUserByUsername(username);
+        if (currentUser.getUsername().equals(username)) {
+            throw new UserDeletionNotAllowedException("You cannot delete your own account");
+        }
+        if (Role.ADMIN.equals(user.getRole()) && userService.countAdmins() == 1) {
+            throw new UserDeletionNotAllowedException("Cannot delete the last admin account");
+        }
+        userService.deleteUser(user);
+    }
 }

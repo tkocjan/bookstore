@@ -13,11 +13,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,15 +40,31 @@ public class OrderController {
     private final UserService userService;
     private final OrderService orderService;
 
-    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public List<OrderDto> getOrders(
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @RequestParam(value = "text", required = false) String text
     ) {
-        List<Order> orders = (text == null)
-            ? orderService.getOrders()
-            : orderService.getOrdersContainingText(text);
+//        boolean isAdmin = false;
+//        for (GrantedAuthority authority: currentUser.getAuthorities()) {
+//            if (authority.getAuthority().equals("ADMIN")) {
+//                isAdmin = true;
+//                break;
+//            }
+//        }
+
+        List<Order> orders;
+        if (currentUser.isAdmin()) {
+            orders = (text == null)
+                    ? orderService.getOrders()
+                    : orderService.getOrdersContainingText(text);
+        } else {
+            orders = (text == null)
+                    ? orderService.getOrders(currentUser.getId())
+                    : orderService.getOrdersContainingText(currentUser.getId(), text);
+        }
 
         return orders.stream().map(OrderDto::from).toList();
     }
