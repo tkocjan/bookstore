@@ -1,6 +1,6 @@
 import { screen, fireEvent, within } from '@testing-library/react'
 import { render } from '../../test-utils'
-import AdminOrderPanel from './AdminOrderPanel.tsx'
+import AdminOrdersPanel from './AdminOrdersPanel.tsx'
 
 const mockOrders = [
   {
@@ -38,12 +38,12 @@ function getDeleteButtonInRow(rowText) {
 
 describe('admin/OrderTable', () => {
   it('shows "No order" row when orders array is empty', () => {
-    render(<AdminOrderPanel {...makeProps()} />)
+    render(<AdminOrdersPanel {...makeProps()} />)
     expect(screen.getByText('No order')).toBeInTheDocument()
   })
 
   it('renders a row for each order', () => {
-    render(<AdminOrderPanel {...makeProps({ orders: mockOrders })} />)
+    render(<AdminOrdersPanel {...makeProps({ orders: mockOrders })} />)
     expect(screen.getByText('First order')).toBeInTheDocument()
     expect(screen.getByText('Second order')).toBeInTheDocument()
     expect(screen.getByText('alice')).toBeInTheDocument()
@@ -53,7 +53,7 @@ describe('admin/OrderTable', () => {
   it('calls handleDeleteOrder with the correct order id when delete is clicked', () => {
     const handleDeleteOrder = vi.fn()
     render(
-      <AdminOrderPanel {...makeProps({ orders: mockOrders, handleDeleteOrder })} />
+      <AdminOrdersPanel {...makeProps({ orders: mockOrders, handleDeleteOrder })} />
     )
     fireEvent.click(getDeleteButtonInRow('First order'))
     expect(handleDeleteOrder).toHaveBeenCalledWith('o1')
@@ -61,7 +61,7 @@ describe('admin/OrderTable', () => {
 
   it('calls handleSearchOrder when search form is submitted', () => {
     const handleSearchOrder = vi.fn((e) => e.preventDefault())
-    render(<AdminOrderPanel {...makeProps({ handleSearchOrder })} />)
+    render(<AdminOrdersPanel {...makeProps({ handleSearchOrder })} />)
     fireEvent.submit(
       screen.getByPlaceholderText('Search by Id or Description').closest('form')
     )
@@ -69,7 +69,7 @@ describe('admin/OrderTable', () => {
   })
 
   it('renders OrderForm for creating new orders', () => {
-    render(<AdminOrderPanel {...makeProps()} />)
+    render(<AdminOrdersPanel {...makeProps()} />)
     expect(screen.getByPlaceholderText('Description *')).toBeInTheDocument()
   })
 })

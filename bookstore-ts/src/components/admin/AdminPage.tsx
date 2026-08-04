@@ -7,7 +7,7 @@ import {IconDeviceLaptop, IconUsers} from "@tabler/icons-react";
 
 import {getUserRole} from '../context/AuthContext.tsx'
 import UsersPanel from "./UsersPanel.tsx";
-import AdminOrderPanel from "./AdminOrderPanel.tsx";
+import AdminOrdersPanel from "./AdminOrdersPanel.tsx";
 
 function AdminPage()
 {
@@ -47,7 +47,7 @@ function AdminPage()
 
                 <Tabs.Panel value='users' pt='md'><UsersPanel/></Tabs.Panel>
 
-                <Tabs.Panel value='orders' pt='md'><AdminOrderPanel/></Tabs.Panel>
+                <Tabs.Panel value='orders' pt='md'><AdminOrdersPanel/></Tabs.Panel>
 
             </Tabs>
         </Container>

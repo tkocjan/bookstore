@@ -10,7 +10,7 @@ import {handleLogError} from "../misc/Helpers.ts";
 import AdminOrderList from "./AdminOrderList.tsx";
 
 
-function AdminOrderPanel()
+function AdminOrdersPanel()
 {
     const {t} = useTranslation("common");
 
@@ -118,4 +118,4 @@ function AdminOrderPanel()
     )
 }
 
-export default AdminOrderPanel
+export default AdminOrdersPanel
