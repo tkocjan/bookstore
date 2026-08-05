@@ -2,7 +2,13 @@ package com.abidimi.bookstore.domain.order;
 
 import java.util.List;
 
+import static com.abidimi.bookstore.domain.order.Order.Specs.byText;
+import static com.abidimi.bookstore.domain.order.Order.Specs.byUserId;
+
+import com.abidimi.bookstore.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -11,32 +17,22 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public List<Order> getOrders() {
-        return orderRepository.findAllByOrderByCreatedAtDesc();
-    }
+    public List<Order> getOrders(Long userId, boolean isAdmin, String text) {
+        Specification<Order> spec = Specification.unrestricted();
 
-    public List<Order> getOrders(Long userId) {
-        return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+        if (!isAdmin) {
+            spec = spec.and(byUserId(userId));
+        }
+
+        if (text != null && !text.isEmpty()) {
+            spec = spec.and(byText(text));
+        }
+
+        return orderRepository.findAll(spec, Sort.by("createdAt").descending());
     }
 
     public long countOrders() {
         return orderRepository.count();
-    }
-
-    public List<Order> getOrdersContainingText(String text) {
-        return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(
-                text,
-                text
-        );
-    }
-
-    public List<Order> getOrdersContainingText(Long userId, String text) {
-        return orderRepository.findByUserIdAndIdContainingOrUserIdAndDescriptionContainingIgnoreCaseOrderByCreatedAt(
-            userId,
-            text,
-            userId,
-            text
-        );
     }
 
     public Order validateAndGetOrder(String id) {

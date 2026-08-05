@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,44 +35,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/orders")
+//@RequestMapping("/api/orders")
 public class OrderController {
 
     private final UserService userService;
     private final OrderService orderService;
 
-//    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
-    @GetMapping
+    @GetMapping("/api/orders")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority({'USER', 'ADMIN'})")
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     public List<OrderDto> getOrders(
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @RequestParam(value = "text", required = false) String text
     ) {
-//        boolean isAdmin = false;
-//        for (GrantedAuthority authority: currentUser.getAuthorities()) {
-//            if (authority.getAuthority().equals("ADMIN")) {
-//                isAdmin = true;
-//                break;
-//            }
-//        }
-
-        List<Order> orders;
-        if (currentUser.isAdmin()) {
-            orders = (text == null)
-                    ? orderService.getOrders()
-                    : orderService.getOrdersContainingText(text);
-        } else {
-            orders = (text == null)
-                    ? orderService.getOrders(currentUser.getId())
-                    : orderService.getOrdersContainingText(currentUser.getId(), text);
-        }
+        List<Order> orders = orderService.getOrders(
+            currentUser.getId(),
+            currentUser.isAdmin(),
+            text
+        );
 
         return orders.stream().map(OrderDto::from).toList();
     }
 
-    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @PostMapping("/api/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
+    @PreAuthorize("isAuthenticated()")
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     public OrderDto createOrder(
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @Valid @RequestBody CreateOrderRequest createOrderRequest
@@ -83,9 +73,11 @@ public class OrderController {
         return OrderDto.from(orderService.saveOrder(order));
     }
 
-    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @DeleteMapping("/api/orders/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+//    @Secured("ADMIN")
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     public void deleteOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
 

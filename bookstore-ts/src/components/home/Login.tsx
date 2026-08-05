@@ -87,7 +87,7 @@ function Login()
                     </Paper>
                 </form>
                 <Paper withBorder p='sm' radius='md' mt='sm' ta='center' shadow='sm'>
-                    {t("Don't have an account?") + ' '}{' '}
+                    {t("Don't have an account?") + ' '}
                     <Anchor component={NavLink} to='/signup' c='violet'>
                         {t("Sign Up")}
                     </Anchor>

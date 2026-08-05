@@ -32,7 +32,6 @@ function UsersPanel()
             .then((response) => setUsers(response.data))
             .catch((error: AxiosError) => handleLogError(error))
             .finally(() => setIsUsersLoading(false));
-
     }
 
     const handleDeleteUser = async (username: string) => {

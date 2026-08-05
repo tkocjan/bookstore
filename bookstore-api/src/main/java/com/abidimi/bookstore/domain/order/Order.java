@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 
 @Data
 @NoArgsConstructor
@@ -44,5 +45,22 @@ public class Order {
     public void onPrePersist() {
         if (id == null) id = UUID.randomUUID().toString();
         if (createdAt == null) createdAt = Instant.now();
+    }
+
+    interface Specs {
+        static Specification<Order> byUserId(Long userId) {
+            return (order, cq, cb) ->
+                    cb.equal(order.get("user").get("id"), userId);
+        }
+
+        static Specification<Order> byText(String text) {
+            return (order, cq, cb) -> {
+                String likeStr = "%"+text+"%";
+                return cb.or(
+                    cb.like(order.get("id"), likeStr),
+                    cb.like(order.get("description"), likeStr)
+                );
+            };
+        }
     }
 }

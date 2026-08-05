@@ -1,4 +1,4 @@
-import {Link, useNavigate} from 'react-router'
+import {Link, useNavigate, useLocation} from 'react-router'
 import {Group, Button, Anchor, AppShell, Text} from '@mantine/core'
 import {useTranslation} from "react-i18next";
 
@@ -11,6 +11,10 @@ function Navbar()
 
     const {userIsAuthenticated, userLoggedOut} = useAuthContext()
     const navigate = useNavigate()
+    const {pathname} = useLocation();
+    const underlineActive = (path: string): string =>
+        path === pathname || path !== '/' && path === pathname.slice(0, path.length)
+            ? 'underline': '';
 
     const isAuthenticated = userIsAuthenticated()
     const user = getJwtUserData()
@@ -30,31 +34,31 @@ function Navbar()
                     <Text fw={700} size='lg' c='white'>
                         {t("Bookstore")}
                     </Text>
-                    <Anchor component={Link} to='/' c='white'>
+                    <Anchor component={Link} to='/' c='white' td={underlineActive('/')}>
                         {t("Home")}
                     </Anchor>
-                    <Anchor component={Link} to='/bookspage' c='white'>
+                    <Anchor component={Link} to='/bookspage' c='white' td={underlineActive('/bookspage')}>
                         {t("Books")}
                     </Anchor>
                     {isAdmin && (
-                        <Anchor component={Link} to='/adminpage' c='white'>
+                        <Anchor component={Link} to='/adminpage' c='white' td={underlineActive('/adminpage')}>
                             {t("Admin")}
                         </Anchor>
                     )}
                     {isUser && (
-                        <Anchor component={Link} to='/orderspage' c='white'>
+                        <Anchor component={Link} to='/orderspage' c='white' td={underlineActive('/orderspage')}>
                             {t("Orders")}
                         </Anchor>
                     )}
                 </Group>
                 <Group>
                     {!isAuthenticated && (
-                        <Anchor component={Link} to='/login' c='white'>
+                        <Anchor component={Link} to='/login' c='white' td={underlineActive('/login')}>
                             {t("Login")}
                         </Anchor>
                     )}
                     {!isAuthenticated && (
-                        <Anchor component={Link} to='/signup' c='white'>
+                        <Anchor component={Link} to='/signup' c='white' td={underlineActive('/signup')}>
                             {t("Sign Up")}
                         </Anchor>
                     )}
@@ -64,7 +68,7 @@ function Navbar()
                         </Text>
                     )}
                     {isUser && (
-                        <Anchor component={Link} to='/cartpage' c='white'>
+                        <Anchor component={Link} to='/cartpage' c='white' td={underlineActive('/cartpage')}>
                             {t("Cart")}
                         </Anchor>
                     )}
