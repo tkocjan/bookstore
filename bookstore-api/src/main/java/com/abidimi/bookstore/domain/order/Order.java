@@ -1,15 +1,18 @@
 package com.abidimi.bookstore.domain.order;
 
-import com.abidimi.bookstore.domain.book.Book;
 import com.abidimi.bookstore.domain.user.User;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.From;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.data.jpa.domain.Specification;
 
 @Data
@@ -25,17 +28,23 @@ public class Order {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+//    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "orders_books",
-        joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "isbn"))
-    List<Book> books;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "orders_books",
+//        joinColumns = @JoinColumn(name = "order_id"),
+//        inverseJoinColumns = @JoinColumn(name = "isbn"))
+//    List<Book> books;
 
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     public Order(String description) {
         this.description = description;
@@ -44,23 +53,48 @@ public class Order {
     @PrePersist
     public void onPrePersist() {
         if (id == null) id = UUID.randomUUID().toString();
-        if (createdAt == null) createdAt = Instant.now();
     }
 
-    interface Specs {
-        static Specification<Order> byUserId(Long userId) {
-            return (order, cq, cb) ->
-                    cb.equal(order.get("user").get("id"), userId);
-        }
+    static Specification<Order> userIdEquals(Long userId) {
+        return (order, query, cb) ->
+            cb.equal(order.get("user").get("id"), userId);
+    }
 
-        static Specification<Order> byText(String text) {
-            return (order, cq, cb) -> {
-                String likeStr = "%"+text+"%";
-                return cb.or(
+    static Specification<Order> idOrDescriptionLike(String text) {
+        return (order, query, cb) -> {
+            String likeStr = "%"+text+"%";
+            return cb.or(
+                cb.like(order.get("id"), likeStr),
+                cb.like(order.get("description"), likeStr)
+            );
+        };
+    }
+
+    static Specification<Order> orderByCreatedAtDesc() {
+        return (order, query, cb) -> {
+            query.orderBy(cb.desc(order.get("createdAt")));
+
+            return cb.conjunction();
+        };
+    }
+
+    static PredicateSpecification<Order> ifUserNotAdminThenUserIdEquals(Long userId, boolean isAdmin) {
+        return (From<?, Order> order, CriteriaBuilder cb) -> {
+            if (isAdmin) return null;
+
+            return cb.equal(order.get("user").get("id"), userId);
+        };
+    }
+
+    static PredicateSpecification<Order> ifTextNotEmptyThenIdOrDescriptionLike(String text) {
+        return (From<?, Order> order, CriteriaBuilder cb) -> {
+            if (text == null || text.isEmpty()) return null;
+
+            String likeStr = "%" + text + "%";
+            return cb.or(
                     cb.like(order.get("id"), likeStr),
                     cb.like(order.get("description"), likeStr)
-                );
-            };
-        }
+            );
+        };
     }
 }

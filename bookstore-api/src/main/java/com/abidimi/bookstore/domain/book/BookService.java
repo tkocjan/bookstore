@@ -11,37 +11,37 @@ import java.util.List;
 @Service
 public class BookService {
 
-  private final BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-  public List<Book> getBooks() {
-    return bookRepository.findAllByOrderByTitle();
-  }
+    public List<Book> getBooks() {
+        return bookRepository.findAllByOrderByTitle();
+    }
 
-  public Page<Book> getBooks(Pageable pageable) {
-    return bookRepository.findAllByOrderByTitle(pageable);
-  }
+    public Page<Book> getBooks(Pageable pageable) {
+        return bookRepository.findAllByOrderByTitle(pageable);
+    }
 
-  public Page<Book> getBooksContainingText(String text, Pageable pageable) {
-    return bookRepository.findAllByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(text, text, pageable);
-  }
+    public Page<Book> getBooksContainingText(String text, Pageable pageable) {
+        return bookRepository.findAllByIsbnContainingOrTitleContainingIgnoreCaseOrderByTitle(text, text, pageable);
+    }
 
-  public Book validateAndGetBook(String isbn) {
-    return bookRepository
-        .findById(isbn)
-        .orElseThrow(
-            () -> new BookNotFoundException("Book with isbn %s not found".formatted(isbn))
-        );
-  }
+    public Book validateAndGetBook(String isbn) {
+        return bookRepository.findByIsbn(isbn)
+            .orElseThrow(
+                () -> new BookNotFoundException("Book with isbn %s not found".formatted(isbn))
+            );
+    }
 
-  public Book saveBook(Book book) {
-    return bookRepository.save(book);
-  }
+    public Book saveBook(Book book) {
+        return bookRepository.save(book);
+//        return bookRepository.saveAndFlush(book);
+    }
 
-  public void deleteBook(Book book) {
-    bookRepository.delete(book);
-  }
+    public void deleteBook(Book book) {
+        bookRepository.delete(book);
+    }
 
-  public long countBooks() {
-    return bookRepository.count();
-  }
+    public long countBooks() {
+        return bookRepository.count();
+    }
 }

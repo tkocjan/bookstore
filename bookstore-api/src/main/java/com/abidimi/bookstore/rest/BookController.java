@@ -51,6 +51,15 @@ public class BookController {
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @GetMapping("/public/books/{isbn}")
+    public BookDto getBook(@PathVariable String isbn)
+    {
+        Book book = bookService.validateAndGetBook(isbn);
+
+        return BookDto.from(book);
+    }
+
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/books")
     public BookDto createBook(@Valid @RequestBody CreateBookRequest createBookRequest) {

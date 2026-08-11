@@ -98,12 +98,12 @@ function BooksPage()
                                 }}
                                 rightSection={
                                     <ActionIcon aria-label="Search" style={{cursor: 'pointer'}}
-                                                onClick={() => {
-                                                    if (searchText !== bookTextSearch) {
-                                                        setCurrentPage(1);
-                                                        setBookTextSearch(searchText);
-                                                    }
-                                                }}
+                                        onClick={() => {
+                                            if (searchText !== bookTextSearch) {
+                                                setCurrentPage(1);
+                                                setBookTextSearch(searchText);
+                                            }
+                                        }}
                                     >
                                         <IconSearch size={16}/>
                                     </ActionIcon>
