@@ -16,7 +16,7 @@ import AdminPage from './components/admin/AdminPage'
 import UserOrdersPage from './components/orders/UserOrdersPage.tsx'
 import CartPage from './components/cart/CartPage'
 
-function App() {
+export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -49,5 +49,3 @@ function App() {
     </AuthProvider>
   )
 }
-
-export default App

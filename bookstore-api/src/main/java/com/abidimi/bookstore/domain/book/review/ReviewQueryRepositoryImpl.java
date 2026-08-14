@@ -22,36 +22,36 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository
     @PersistenceContext
     private EntityManager em;
 
-//    @Override
-//    public List<Tuple> getReviewsForUser(Long userId) {
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Review> query = cb.createQuery(Review.class);
-//
-//        Root<Review> review = query.from(Review.class);
-//        Root<ReviewPermission> permission = query.from(ReviewPermission.class);
-//
-//        Join<Review, ReviewPermission> permissionJoin = review.join(ReviewPermission.class, JoinType.LEFT);
-//        permissionJoin.on(
-//            cb.equal(permissionJoin.get("review").get("id"), review.get("id"))
-//        );
-//
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//        predicates.add(
-//            cb.or(
-//                cb.equal(review.get("globalViewPermitted"), true),
-//                cb.equal(review.get("reviewerUser").get("id"), userId),
-//                cb.equal(permission.get("permittedUser").get("id"), userId)
-//            )
-//        );
-//
-//        query.select(cb.tuple(review, permission))
-//                .where(cb.and(predicates.toArray(new Predicate[0])));
-//
-//        query.orderBy(cb.asc(review.get("createdAt")));
-//
-//        return em.createQuery(query).getResultList();
-//    }
+    @Override
+    public List<Review> getReviewsForUser(Long userId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Review> query = cb.createQuery(Review.class);
+
+        Root<Review> review = query.from(Review.class);
+        Root<ReviewPermission> permission = query.from(ReviewPermission.class);
+
+        Join<Review, ReviewPermission> permissionJoin = review.join(ReviewPermission.class, JoinType.LEFT);
+        permissionJoin.on(
+            cb.equal(permissionJoin.get("review").get("id"), review.get("id"))
+        );
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(
+            cb.or(
+                cb.equal(review.get("globalViewPermitted"), true),
+                cb.equal(review.get("reviewerUser").get("id"), userId),
+                cb.equal(permission.get("permittedUser").get("id"), userId)
+            )
+        );
+
+        query.select(review)
+                .where(cb.and(predicates.toArray(new Predicate[0])));
+
+        query.orderBy(cb.asc(review.get("createdAt")));
+
+        return em.createQuery(query).getResultList();
+    }
 
     @Override
     public List<Object[]> getReviewsForUserAsArray(Long userId)
@@ -91,18 +91,17 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository
     }
 
     @Override
-    public List<Tuple> getReviewsForUserAsTuple(Long userId)
-    {
+    public List<Tuple> getReviewsForUserAsTuple(Long userId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
         Root<Review> review = query.from(Review.class);
 
         Join<Review, ReviewPermission> permission = review.join(ReviewPermission.class, JoinType.LEFT);
         permission.on(
-                cb.and(
-                        cb.equal(permission.get("review").get("id"), review.get("id")),
-                        cb.equal(permission.get("permittedUser").get("id"), userId)
-                )
+            cb.and(
+                cb.equal(permission.get("review").get("id"), review.get("id")),
+                cb.equal(permission.get("permittedUser").get("id"), userId)
+            )
         );
 
         Predicate predicate;
@@ -110,9 +109,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository
             predicate = cb.equal(review.get("globalViewPermitted"), true);
         } else {
             predicate = cb.or(
-                    cb.equal(review.get("globalViewPermitted"), true),
-                    cb.equal(review.get("reviewerUser").get("id"), userId),
-                    cb.equal(permission.get("permittedUser").get("id"), userId)
+                cb.equal(review.get("globalViewPermitted"), true),
+                cb.equal(review.get("reviewerUser").get("id"), userId),
+                cb.equal(permission.get("permittedUser").get("id"), userId)
             );
         }
 
@@ -121,11 +120,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository
         List<Tuple> tuples = em.createQuery(query).getResultList();
 
         // Example:
-        // Tuple firstTuple = tuples.get(0);
-        // Review r = firstTuple.get(0, Review.class);
-        // ReviewPermission rp = firstTuple.get(1, ReviewPermission.class);
+         Tuple firstTuple = tuples.get(0);
+         Review r = firstTuple.get(0, Review.class);
+         ReviewPermission rp = firstTuple.get(1, ReviewPermission.class);
 
         return tuples;
     }
-
 }

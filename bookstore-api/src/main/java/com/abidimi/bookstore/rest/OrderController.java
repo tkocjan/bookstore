@@ -55,7 +55,8 @@ public class OrderController {
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @RequestParam(value = "text", required = false) String text
     ) {
-        Pageable pageable = PageRequest.of(0, 2, Sort.by("id"));
+//        Pageable pageable = PageRequest.of(0, 10, Sort.by("id"));
+//
 //        List<Tuple> tuple = reviewService.getReviews(
 //        List<Review> reviews = reviewService.getReviewsSpec(
 //        List<Tuple> reviews = reviewService.getReviewsSpecAsTuple(    // not working
@@ -63,11 +64,11 @@ public class OrderController {
 //        List<Object[]> objectArrayList = reviewRepository.getReviewsForUserAsArray(
 //        List<Review> review = reviewRepository.getAllReviews(
 //        List<ReviewDto> dtos = reviewRepository.getAllDtosForUser(
-//        Page<ReviewDto> dtos = reviewRepository.findAllDtosForUser(
-        Page<ReviewDto> dtos = reviewRepository.findAllDtosForUserNative(
-            currentUser.getId(),
-            pageable
-        );
+//        Page<ReviewDto> dtos = reviewRepository.findPagedDtosForUser(
+//        Page<ReviewDto> dtos = reviewRepository.findPagedDtosForUserNative(
+//            currentUser.getId(),
+//            pageable
+//        );
 
         List<Order> orders = orderService.getOrdersSpec(
             currentUser.getId(),

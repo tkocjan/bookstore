@@ -15,7 +15,7 @@ type CartListProps = {
     books: BookDto[],
 }
 
-function CartList(props: CartListProps)
+export default function CartList(props: CartListProps)
 {
     const {
         books,
@@ -62,5 +62,3 @@ function CartList(props: CartListProps)
         </Box>
     )
 }
-
-export default CartList

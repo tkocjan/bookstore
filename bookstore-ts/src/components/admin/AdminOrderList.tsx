@@ -9,7 +9,7 @@ type AdminOrderListProps = {
     handleDeleteOrder: (orderId: string) => void;
 };
 
-function AdminOrderList(props: AdminOrderListProps)
+export default function AdminOrderList(props: AdminOrderListProps)
 {
     const {
         orders,
@@ -63,5 +63,3 @@ function AdminOrderList(props: AdminOrderListProps)
         </Table>
     )
 }
-
-export default AdminOrderList

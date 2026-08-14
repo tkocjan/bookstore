@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
   private final UserService userService;
@@ -32,14 +31,14 @@ public class AuthController {
   private final AuthenticationManager authenticationManager;
   private final TokenProvider tokenProvider;
 
-  @PostMapping("/authenticate")
+  @PostMapping("/auth/authenticate")
   public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
     String token = authenticateAndGetToken(loginRequest.username(), loginRequest.password());
     return new AuthResponse(token);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping("/signup")
+  @PostMapping("/auth/signup")
   public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
     if (userService.hasUserWithUsername(signUpRequest.username())) {
       throw new DuplicatedUserInfoException(

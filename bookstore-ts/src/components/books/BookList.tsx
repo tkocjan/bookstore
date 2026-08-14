@@ -6,7 +6,7 @@ import {
     Stack,
     Box,
     Skeleton,
-    ScrollArea, Button, Flex, Group,
+    ScrollArea, Button, Group,
 } from '@mantine/core'
 import type {BookDto} from "../misc/BookstoreApi.ts";
 import BookCover from '../misc/BookCover'
@@ -17,7 +17,7 @@ type BookListProps = {
     books: BookDto[],
 }
 
-function BookList(props: BookListProps)
+export default function BookList(props: BookListProps)
 {
     const {t} = useTranslation("common");
 
@@ -78,5 +78,3 @@ function BookList(props: BookListProps)
         </Box>
     )
 }
-
-export default BookList

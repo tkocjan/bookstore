@@ -7,7 +7,7 @@ type BookCoverProps = {
     h: number;
 }
 
-function BookCover(props: BookCoverProps)
+export default function BookCover(props: BookCoverProps)
 {
     const {isbn, w, h} = props;
 
@@ -53,5 +53,3 @@ function BookCover(props: BookCoverProps)
         </>
     )
 }
-
-export default BookCover

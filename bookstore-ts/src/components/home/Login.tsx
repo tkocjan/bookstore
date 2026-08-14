@@ -19,7 +19,7 @@ import {useAuthContext} from '../context/AuthContext.tsx'
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {parseJwt, handleLogError} from '../misc/Helpers.ts'
 
-function Login()
+export default function Login()
 {
     const {t} = useTranslation("common");
 
@@ -101,5 +101,3 @@ function Login()
         </Center>
     )
 }
-
-export default Login

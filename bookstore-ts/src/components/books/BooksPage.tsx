@@ -21,7 +21,7 @@ import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi
 import BookList from './BookList.tsx'
 import {handleLogError} from '../misc/Helpers'
 
-function BooksPage()
+export default function BooksPage()
 {
     const {t} = useTranslation("common");
 
@@ -123,5 +123,3 @@ function BooksPage()
         </Container>
     )
 }
-
-export default BooksPage

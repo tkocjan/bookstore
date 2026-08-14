@@ -9,7 +9,7 @@ type UserListProps = {
     handleDeleteUser: (orderId: string) => void;
 }
 
-function UserList({
+export default function UserList({
    users,
    handleDeleteUser,
 }: UserListProps) {
@@ -63,6 +63,3 @@ function UserList({
         </Table>
     )
 }
-
-export default UserList
-

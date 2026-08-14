@@ -7,7 +7,7 @@ type UserOrderListProps = {
     orders: OrderDto[] | null;
 }
 
-function UserOrderList({
+export default function UserOrderList({
                            orders,
                        }: UserOrderListProps) {
     const {t} = useTranslation("common");
@@ -45,5 +45,3 @@ function UserOrderList({
         </Table>
     )
 }
-
-export default UserOrderList

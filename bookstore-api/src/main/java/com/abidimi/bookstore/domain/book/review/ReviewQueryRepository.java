@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewQueryRepository
 {
-//    List<Tuple>  getReviewsForUser(Long userId);
+    List<Review>  getReviewsForUser(Long userId);
     List<Tuple> getReviewsForUserAsTuple(Long userId);
     List<Object[]> getReviewsForUserAsArray(Long userId);
 }

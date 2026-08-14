@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import {bookstoreApi} from '../misc/BookstoreApi.ts'
 import {handleLogError} from '../misc/Helpers.ts'
 
-function Home() {
+export default function Home() {
     const [numberOfUsers, setNumberOfUsers] = useState(null)
     const [numberOfOrders, setNumberOfOrders] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -61,5 +61,3 @@ function Home() {
         </Container>
     )
 }
-
-export default Home

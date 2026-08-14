@@ -8,27 +8,25 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecificationExecutor<Review>, ReviewQueryRepository
 {
-//    @Query(value = findAllDtosForUser_Query, countQuery = findAllDtosForUser_Count)
-//    Page<ReviewDto> findAllDtosForUser(
-//        @Param("userId") Long userId,
-//        Pageable page
-//    );
+    @Query(value = findPagedDtosForUser_Query, countQuery = findPagedDtosForUser_Count)
+    Page<ReviewDto> findPagedDtosForUser(
+        @Param("userId") Long userId,
+        Pageable page
+    );
 
 //    List<Review> getAllReviews(
 //            @Param("userId") Long userId,
 //            boolean isAdmin
 //    );
 
-    Page<ReviewDto> findAllDtosForUserNative(
+    Page<ReviewDto> findPagedDtosForUserNative(
         @Param("userId") Long userId,
         Pageable page
     );
 
-    String findAllDtosForUser_Body =
+    String findPagedDtosForUser_Body =
         """
 
         FROM Review r
@@ -47,14 +45,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
                 )
             )
         """;
-    String findAllDtosForUser_Count = "SELECT COUNT(*)" + findAllDtosForUser_Body;
-    String findAllDtosForUser_Query =
+    String findPagedDtosForUser_Count = "SELECT COUNT(*)" + findPagedDtosForUser_Body;
+    String findPagedDtosForUser_Query =
         """
         SELECT NEW com.abidimi.bookstore.rest.dto.ReviewDto(
             r.id,
             r.reviewHtml,
-            r.reviewerUser.id,
             r.globalViewPermitted,
+            r.reviewerUser.id,
             NEW com.abidimi.bookstore.rest.dto.ReviewPermissionDto(
                 rp.id,
                 rp.permittedUser.id,
@@ -63,9 +61,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
                 IFNULL(rp.userDeletePermitted, false)
             )
         )
-        """ + findAllDtosForUser_Body;
+        """ + findPagedDtosForUser_Body;
 
-    String findAllDtosForUserNative_Body =
+    String findPagedDtosForUserNative_Body =
         """
 
         FROM reviews r
@@ -84,17 +82,20 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
                 )
             )
         """;
-    String findAllDtosForUserNative_Count = "SELECT COUNT(*) as cnt" + findAllDtosForUserNative_Body;
-    String findAllDtosForUserNative_Query =
+    String findPagedDtosForUserNative_Count = "SELECT COUNT(*) as cnt" + findPagedDtosForUserNative_Body;
+    String findPagedDtosForUserNative_Query =
         """
         SELECT
             r.id,
             r.review_html,
             r.global_view_permitted,
             r.reviewer_user_id,
+        
+            -- ReviewPermissionDto
+            rp.id as review_permission_id,
             rp.permitted_user_id,
             COALESCE(rp.user_view_permitted, false) as user_view_permitted,
             COALESCE(rp.user_edit_permitted, false) as user_edit_permitted,
             COALESCE(rp.user_delete_permitted, false) as user_delete_permitted
-        """ + findAllDtosForUserNative_Body;
+        """ + findPagedDtosForUserNative_Body;
 }

@@ -23,7 +23,7 @@ import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi
 import {handleLogError} from '../misc/Helpers'
 import {IconSearch, IconShoppingCart} from "@tabler/icons-react";
 
-function CartPage()
+export default function CartPage()
 {
     const {t} = useTranslation("common");
 
@@ -128,5 +128,3 @@ function CartPage()
         </Container>
     )
 }
-
-export default CartPage

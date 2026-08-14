@@ -15,7 +15,7 @@ import {bookstoreApi, type OrderInputData} from '@/components/misc/BookstoreApi.
 import {handleLogError} from '../misc/Helpers.ts'
 import OrderForm from "../misc/OrderForm.tsx";
 
-function UserOrdersPage()
+export default function UserOrdersPage()
 {
     const {t} = useTranslation("common");
 
@@ -129,5 +129,3 @@ function UserOrdersPage()
         </Container>
     )
 }
-
-export default UserOrdersPage;

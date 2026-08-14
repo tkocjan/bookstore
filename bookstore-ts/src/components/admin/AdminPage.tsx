@@ -9,7 +9,7 @@ import {getUserRole} from '../context/AuthContext.tsx'
 import UsersPanel from "./UsersPanel.tsx";
 import AdminOrdersPanel from "./AdminOrdersPanel.tsx";
 
-function AdminPage()
+export default function AdminPage()
 {
     const {t} = useTranslation("common");
 
@@ -53,5 +53,3 @@ function AdminPage()
         </Container>
     )
 }
-
-export default AdminPage

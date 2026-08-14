@@ -11,7 +11,7 @@ type OrderFormProps = {
     isLoading: boolean;
 }
 
-function OrderForm({
+export default function OrderForm({
    orderDescription,
    handleInputChange,
    handleCreateOrder,
@@ -41,5 +41,3 @@ function OrderForm({
         </form>
     )
 }
-
-export default OrderForm

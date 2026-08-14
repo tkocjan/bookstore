@@ -19,7 +19,7 @@ import {useAuthContext} from '../context/AuthContext.tsx'
 import {bookstoreApi, type SignupInputData} from '../misc/BookstoreApi.ts'
 import {parseJwt, handleLogError} from '../misc/Helpers.ts'
 
-function Signup()
+export default function Signup()
 {
     const {t} = useTranslation("common");
 
@@ -132,5 +132,3 @@ function Signup()
         </Center>
     )
 }
-
-export default Signup

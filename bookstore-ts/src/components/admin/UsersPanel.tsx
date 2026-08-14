@@ -8,7 +8,7 @@ import {bookstoreApi} from '../misc/BookstoreApi'
 import UserList from "./UserList.tsx";
 import {handleLogError} from "../misc/Helpers.ts";
 
-function UsersPanel()
+export default function UsersPanel()
 {
     const {t} = useTranslation("common");
 
@@ -83,5 +83,3 @@ function UsersPanel()
         </Box>
     )
 }
-
-export default UsersPanel

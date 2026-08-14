@@ -17,12 +17,12 @@ import java.time.Instant;
 
 // https://thorben-janssen.com/spring-data-jpa-dto-native-queries/
 @NamedNativeQueries({
-    @NamedNativeQuery(name = "Review.findAllDtosForUserNative",
-        query = ReviewRepository.findAllDtosForUserNative_Query,
+    @NamedNativeQuery(name = "Review.findPagedDtosForUserNative",
+        query = ReviewRepository.findPagedDtosForUserNative_Query,
         resultSetMapping = "Mapping.ReviewDto"
     ),
-    @NamedNativeQuery(name = "Review.findAllDtosForUserNative.count",
-        query = ReviewRepository.findAllDtosForUserNative_Count,
+    @NamedNativeQuery(name = "Review.findPagedDtosForUserNative.count",
+        query = ReviewRepository.findPagedDtosForUserNative_Count,
         resultSetMapping = "Mapping.ReviewDto.count"
     )
 })
@@ -33,8 +33,15 @@ import java.time.Instant;
             columns = {
                 @ColumnResult(name = "id", type = Long.class),
                 @ColumnResult(name = "review_html", type = String.class),
-                @ColumnResult(name = "reviewer_user_id", type = Long.class),
                 @ColumnResult(name = "global_view_permitted", type = Boolean.class),
+                @ColumnResult(name = "reviewer_user_id", type = Long.class),
+
+                // ReviewPermissionDto
+                @ColumnResult(name = "review_permission_id", type = Long.class),
+                @ColumnResult(name = "permitted_user_id", type = Long.class),
+                @ColumnResult(name = "user_view_permitted", type = Boolean.class),
+                @ColumnResult(name = "user_edit_permitted", type = Boolean.class),
+                @ColumnResult(name = "user_delete_permitted", type = Boolean.class),
             }
         )
     ),
@@ -122,7 +129,5 @@ public class Review {
 //            );
 //        };
 //    }
-
-
 
 }

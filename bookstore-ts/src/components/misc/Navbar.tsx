@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {getJwtUserData, getUserRole, useAuthContext} from '../context/AuthContext.tsx'
 import {LanguageSwitcher} from "./LanguageSwitcher.tsx";
 
-function Navbar()
+export default function Navbar()
 {
     const {t} = useTranslation("common");
 
@@ -88,5 +88,3 @@ function Navbar()
         </AppShell.Header>
     )
 }
-
-export default Navbar
