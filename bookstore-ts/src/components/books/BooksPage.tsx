@@ -6,10 +6,11 @@ import {
     Box,
     Container,
     Flex,
-    Grid,
-    LoadingOverlay,
+    Grid, Group,
+    LoadingOverlay, NumberInput,
     Pagination,
-    Paper,
+    Paper, ScrollArea, Stack,
+    Text,
     TextInput,
     Title
 } from '@mantine/core'
@@ -17,7 +18,7 @@ import type {AxiosError} from "axios";
 import {useTranslation} from "react-i18next";
 import {IconBook, IconSearch} from "@tabler/icons-react";
 
-import {bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi'
+import {type BookDto, bookstoreApi, type GetBooksParams, PAGE_SIZE} from '../misc/BookstoreApi'
 import BookList from './BookList.tsx'
 import {handleLogError} from '../misc/Helpers'
 
@@ -25,13 +26,12 @@ export default function BooksPage()
 {
     const {t} = useTranslation("common");
 
-    const [books, setBooks] = useState([]);
-    const [bookTextSearch, setBookTextSearch] = useState('');
-    const [isBooksLoading, setIsBooksLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+    const [books, setBooks] = useState<BookDto[]>([]);
+    const [bookTextSearch, setBookTextSearch] = useState<string>('');
+    const [isBooksLoading, setIsBooksLoading] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>('');
-
 
     useEffect(() => {
         handleGetBooks()
@@ -56,7 +56,6 @@ export default function BooksPage()
             })
             .catch((error: AxiosError) => handleLogError(error))
             .finally(() => setIsBooksLoading(false));
-
     }, [currentPage, bookTextSearch]);
 
     return (
@@ -112,10 +111,36 @@ export default function BooksPage()
                         </Grid.Col>
                     </Grid>
 
-                    <BookList books={books}/>
+                    <Box pos='relative'>
+                        <ScrollArea p="md" h="calc(100vh - 235px)"
+                                    bd="1px solid var(--mantine-color-blue-6)"
+                        >
+                            <BookList books={books}/>
+                        </ScrollArea>
+                    </Box>
+
+
+                    {/*<BookList books={books}/>*/}
 
                     <Flex justify="flex-end">
+                        <Group>
                         <Pagination value={currentPage} total={totalPages} onChange={setCurrentPage} size="xs" mt="sm"/>
+                        <Stack gap={0}>
+                            <Text size="xs" p={0} ta="center">{t("Page")}</Text>
+                            <NumberInput size="xs" p={0}
+                                value={currentPage}
+                                onChange={(val) => {
+                                    if (typeof val === 'number') {
+                                        setCurrentPage(Math.min(Math.max(val, 1), totalPages));
+                                    }
+                                }}
+                                min={1}
+                                max={totalPages}
+                                style={{ width: 50 }}
+                                aria-label="Jump to page"
+                            />
+                        </Stack>
+                        </Group>
                     </Flex>
 
                 </Box>

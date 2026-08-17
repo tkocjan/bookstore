@@ -27,11 +27,11 @@ export default function CartPage()
 {
     const {t} = useTranslation("common");
 
-    const [books, setBooks] = useState([])
-    const [bookTextSearch, setBookTextSearch] = useState('')
-    const [isBooksLoading, setIsBooksLoading] = useState(false)
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+    const [books, setBooks] = useState([]);
+    const [bookTextSearch, setBookTextSearch] = useState<string>('');
+    const [isBooksLoading, setIsBooksLoading] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>('');
 
     useEffect(() => {
